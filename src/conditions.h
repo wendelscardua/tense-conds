@@ -12,15 +12,14 @@ typedef enum
 
 #define MAX_CONDITIONS 16
 
-extern char num_conditions;
 extern condition_t temp_cond;
 extern char condition_row[MAX_CONDITIONS];
 extern char condition_column[MAX_CONDITIONS];
 extern char condition_seconds[MAX_CONDITIONS];
 extern char condition_frames[MAX_CONDITIONS];
+extern unsigned char condition_hp[MAX_CONDITIONS];
 extern condition_t condition_type[MAX_CONDITIONS];
 
-#pragma zpsym("num_conditions")
 #pragma zpsym("temp_cond")
 
 void init_conditions();

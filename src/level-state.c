@@ -201,7 +201,8 @@ void player_input() {
 }
 
 void conditions_update() {
-  for(i = 0; i < num_conditions; i++) {
+  for(i = 0; i < MAX_CONDITIONS; i++) {
+    if (condition_hp[i] == 0) continue;
     if (condition_frames[i]++ >= 60) {
       condition_frames[i] = 0;
       temp_x = condition_column[i];
@@ -221,6 +222,8 @@ void conditions_update() {
         condition_seconds[i] = 0;
         switch(condition_type[i]) {
         case CondConditioner:
+          // TODO: optimize (random map index, then convert to coordinates if needed
+          // TODO: delay spawn with nice animation
           do {
             temp_x = subrand8(16);
             temp_y = subrand8(12);
@@ -229,6 +232,13 @@ void conditions_update() {
           add_condition();
           map[temp_y * 16 + temp_x] = WallMetatile; // conditions act as walls
           break;
+        }
+        if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {
+          // TODO: delay shutting down
+          multi_vram_buffer_horz(metatiles + 5, 2, temp_int);
+          multi_vram_buffer_horz(metatiles + 7, 2, temp_int + 0x20);
+          set_attribute(0x00);
+          map[temp_y * 16 + temp_x] = FloorMetatile;
         }
       }
     }

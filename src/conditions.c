@@ -5,7 +5,7 @@
 #include "globals.h"
 
 #pragma bss-name(push, "ZEROPAGE")
-char num_conditions, num_conditions_in_pool;
+char num_conditions_in_pool;
 char i_cond, j_cond;
 condition_t temp_cond, temp_cond_2;
 unsigned char cond_pool_weight;
@@ -18,6 +18,7 @@ char condition_column[MAX_CONDITIONS];
 char condition_seconds[MAX_CONDITIONS];
 char condition_frames[MAX_CONDITIONS];
 condition_t condition_type[MAX_CONDITIONS];
+unsigned char condition_hp[MAX_CONDITIONS];
 
 condition_t condition_pool[CondTotal];
 char unlocked[CondTotal];
@@ -52,21 +53,34 @@ const char weights[] =
    10, // CondZombieSpawner
   };
 
+// starting health for each cond
+const unsigned char starting_health[] =
+  {
+   0xff, // CondConditioner
+   0x03, // CondZombieSpawner
+  };
+
 void init_conditions() {
-  num_conditions = 0;
   num_conditions_in_pool = 0;
+  for(i = 0; i < MAX_CONDITIONS; i++) {
+    condition_hp[i] = 0;
+  }
 }
 
 // inputs: row temp_y, column temp_x, condition temp_cond
 void add_condition() {
-  if (num_conditions >= MAX_CONDITIONS) return;
-  condition_row[num_conditions] = temp_y;
-  condition_column[num_conditions] = temp_x;
-  condition_type[num_conditions] = temp_cond;
-  condition_seconds[num_conditions] = 0;
-  condition_frames[num_conditions] = subrand8(16);
+  for(i_cond = 0; i_cond < MAX_CONDITIONS; i_cond++) {
+    if (condition_hp[i_cond] == 0) break;
+  }
+  if (i_cond >= MAX_CONDITIONS) return; // TODO: maybe overwrite another one?
+
+  condition_row[i_cond] = temp_y;
+  condition_column[i_cond] = temp_x;
+  condition_type[i_cond] = temp_cond;
+  condition_seconds[i_cond] = 0;
+  condition_hp[i_cond] = starting_health[temp_cond];
+  condition_frames[i_cond] = subrand8(16);
   update_condition_pool();
-  num_conditions++;
   temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
   multi_vram_buffer_horz(empty_timer, 2, temp_int);
   multi_vram_buffer_horz(condition_icon[temp_cond], 2, temp_int + 0x20);

@@ -10,10 +10,10 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "src/conditions.c", 2673, 1664655594
+	.dbg		file, "src/conditions.c", 3014, 1664657334
 	.dbg		file, "src/lib/nesdoug.h", 6542, 1664622739
 	.dbg		file, "src/lib/neslib.h", 8412, 1664622739
-	.dbg		file, "src/conditions.h", 654, 1664654514
+	.dbg		file, "src/conditions.h", 645, 1664657209
 	.dbg		file, "src/subrand.h", 146, 1664641459
 	.dbg		file, "src/attributes.h", 214, 1664622739
 	.dbg		file, "src/globals.h", 543, 1664622739
@@ -21,18 +21,19 @@
 	.dbg		sym, "subrand8", "00", extern, "_subrand8"
 	.dbg		sym, "set_attribute", "00", extern, "_set_attribute"
 	.dbg		sym, "temp", "00", extern, "_temp"
+	.dbg		sym, "i", "00", extern, "_i"
 	.dbg		sym, "j", "00", extern, "_j"
 	.dbg		sym, "temp_x", "00", extern, "_temp_x"
 	.dbg		sym, "temp_y", "00", extern, "_temp_y"
 	.dbg		sym, "temp_int", "00", extern, "_temp_int"
 	.import		_multi_vram_buffer_horz
 	.import		_subrand8
-	.exportzp	_num_conditions
 	.exportzp	_temp_cond
 	.export		_condition_row
 	.export		_condition_column
 	.export		_condition_seconds
 	.export		_condition_frames
+	.export		_condition_hp
 	.export		_condition_type
 	.export		_init_conditions
 	.export		_add_condition
@@ -40,6 +41,7 @@
 	.export		_random_condition
 	.import		_set_attribute
 	.importzp	_temp
+	.importzp	_i
 	.importzp	_j
 	.importzp	_temp_x
 	.importzp	_temp_y
@@ -55,6 +57,7 @@
 	.export		_condition_icon
 	.export		_unlockables
 	.export		_weights
+	.export		_starting_health
 
 .segment	"RODATA"
 
@@ -74,12 +77,13 @@ _unlockables:
 _weights:
 	.byte	$00
 	.byte	$0A
+_starting_health:
+	.byte	$FF
+	.byte	$03
 
 .segment	"BSS"
 
 .segment	"ZEROPAGE"
-_num_conditions:
-	.res	1,$00
 _temp_cond:
 	.res	1,$00
 .segment	"BSS"
@@ -90,6 +94,8 @@ _condition_column:
 _condition_seconds:
 	.res	16,$00
 _condition_frames:
+	.res	16,$00
+_condition_hp:
 	.res	16,$00
 _condition_type:
 	.res	16,$00
@@ -123,21 +129,37 @@ _unlocked:
 .segment	"CODE"
 
 ;
-; num_conditions = 0;
-;
-	.dbg	line, "src/conditions.c", 56
-	lda     #$00
-	sta     _num_conditions
-;
 ; num_conditions_in_pool = 0;
 ;
-	.dbg	line, "src/conditions.c", 57
+	.dbg	line, "src/conditions.c", 64
+	lda     #$00
 	sta     _num_conditions_in_pool
+;
+; for(i = 0; i < MAX_CONDITIONS; i++) {
+;
+	.dbg	line, "src/conditions.c", 65
+	sta     _i
+L0007:	lda     _i
+	cmp     #$10
+	bcs     L0003
+;
+; condition_hp[i] = 0;
+;
+	.dbg	line, "src/conditions.c", 66
+	ldy     _i
+	lda     #$00
+	sta     _condition_hp,y
+;
+; for(i = 0; i < MAX_CONDITIONS; i++) {
+;
+	.dbg	line, "src/conditions.c", 65
+	inc     _i
+	jmp     L0007
 ;
 ; }
 ;
-	.dbg	line, "src/conditions.c", 58
-	rts
+	.dbg	line, "src/conditions.c", 68
+L0003:	rts
 
 	.dbg	line
 .endproc
@@ -155,56 +177,94 @@ _unlocked:
 .segment	"CODE"
 
 ;
-; if (num_conditions >= MAX_CONDITIONS) return;
+; for(i_cond = 0; i_cond < MAX_CONDITIONS; i_cond++) {
 ;
-	.dbg	line, "src/conditions.c", 62
-	lda     _num_conditions
+	.dbg	line, "src/conditions.c", 72
+	lda     #$00
+	sta     _i_cond
+L0015:	lda     _i_cond
 	cmp     #$10
-	bcc     L000D
+	bcs     L0016
+;
+; if (condition_hp[i_cond] == 0) break;
+;
+	.dbg	line, "src/conditions.c", 73
+	ldy     _i_cond
+	lda     _condition_hp,y
+	beq     L0016
+;
+; for(i_cond = 0; i_cond < MAX_CONDITIONS; i_cond++) {
+;
+	.dbg	line, "src/conditions.c", 72
+	inc     _i_cond
+	jmp     L0015
+;
+; if (i_cond >= MAX_CONDITIONS) return; // TODO: maybe overwrite another one?
+;
+	.dbg	line, "src/conditions.c", 75
+L0016:	lda     _i_cond
+	cmp     #$10
+	bcc     L0017
 ;
 ; }
 ;
-	.dbg	line, "src/conditions.c", 74
+	.dbg	line, "src/conditions.c", 88
 	rts
 ;
-; condition_row[num_conditions] = temp_y;
+; condition_row[i_cond] = temp_y;
 ;
-	.dbg	line, "src/conditions.c", 63
-L000D:	ldy     _num_conditions
+	.dbg	line, "src/conditions.c", 77
+L0017:	ldy     _i_cond
 	lda     _temp_y
 	sta     _condition_row,y
 ;
-; condition_column[num_conditions] = temp_x;
+; condition_column[i_cond] = temp_x;
 ;
-	.dbg	line, "src/conditions.c", 64
-	ldy     _num_conditions
+	.dbg	line, "src/conditions.c", 78
+	ldy     _i_cond
 	lda     _temp_x
 	sta     _condition_column,y
 ;
-; condition_type[num_conditions] = temp_cond;
+; condition_type[i_cond] = temp_cond;
 ;
-	.dbg	line, "src/conditions.c", 65
-	ldy     _num_conditions
+	.dbg	line, "src/conditions.c", 79
+	ldy     _i_cond
 	lda     _temp_cond
 	sta     _condition_type,y
 ;
-; condition_seconds[num_conditions] = 0;
+; condition_seconds[i_cond] = 0;
 ;
-	.dbg	line, "src/conditions.c", 66
-	ldy     _num_conditions
+	.dbg	line, "src/conditions.c", 80
+	ldy     _i_cond
 	lda     #$00
 	sta     _condition_seconds,y
 ;
-; condition_frames[num_conditions] = subrand8(16);
+; condition_hp[i_cond] = starting_health[temp_cond];
 ;
-	.dbg	line, "src/conditions.c", 67
+	.dbg	line, "src/conditions.c", 81
+	lda     #<(_condition_hp)
+	ldx     #>(_condition_hp)
+	clc
+	adc     _i_cond
+	bcc     L000D
+	inx
+L000D:	sta     ptr1
+	stx     ptr1+1
+	ldy     _temp_cond
+	lda     _starting_health,y
+	ldy     #$00
+	sta     (ptr1),y
+;
+; condition_frames[i_cond] = subrand8(16);
+;
+	.dbg	line, "src/conditions.c", 82
 	lda     #<(_condition_frames)
 	ldx     #>(_condition_frames)
 	clc
-	adc     _num_conditions
-	bcc     L0007
+	adc     _i_cond
+	bcc     L000F
 	inx
-L0007:	jsr     pushax
+L000F:	jsr     pushax
 	lda     #$10
 	jsr     _subrand8
 	ldy     #$00
@@ -212,23 +272,18 @@ L0007:	jsr     pushax
 ;
 ; update_condition_pool();
 ;
-	.dbg	line, "src/conditions.c", 68
+	.dbg	line, "src/conditions.c", 83
 	jsr     _update_condition_pool
-;
-; num_conditions++;
-;
-	.dbg	line, "src/conditions.c", 69
-	inc     _num_conditions
 ;
 ; temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
 ;
-	.dbg	line, "src/conditions.c", 70
+	.dbg	line, "src/conditions.c", 84
 	ldx     #$00
 	lda     _temp_y
 	asl     a
-	bcc     L0009
+	bcc     L0011
 	inx
-L0009:	jsr     aslax4
+L0011:	jsr     aslax4
 	stx     tmp1
 	asl     a
 	rol     tmp1
@@ -236,9 +291,9 @@ L0009:	jsr     aslax4
 	ldx     #$00
 	lda     _temp_x
 	asl     a
-	bcc     L000A
+	bcc     L0012
 	inx
-L000A:	ora     ptr1
+L0012:	ora     ptr1
 	sta     _temp_int
 	txa
 	ora     tmp1
@@ -247,7 +302,7 @@ L000A:	ora     ptr1
 ;
 ; multi_vram_buffer_horz(empty_timer, 2, temp_int);
 ;
-	.dbg	line, "src/conditions.c", 71
+	.dbg	line, "src/conditions.c", 85
 	jsr     decsp3
 	lda     #<(_empty_timer)
 	ldy     #$01
@@ -264,15 +319,15 @@ L000A:	ora     ptr1
 ;
 ; multi_vram_buffer_horz(condition_icon[temp_cond], 2, temp_int + 0x20);
 ;
-	.dbg	line, "src/conditions.c", 72
+	.dbg	line, "src/conditions.c", 86
 	jsr     decsp3
 	ldx     #$00
 	lda     _temp_cond
 	asl     a
-	bcc     L000C
+	bcc     L0014
 	inx
 	clc
-L000C:	adc     #<(_condition_icon)
+L0014:	adc     #<(_condition_icon)
 	tay
 	txa
 	adc     #>(_condition_icon)
@@ -290,13 +345,13 @@ L000C:	adc     #<(_condition_icon)
 	ldx     _temp_int+1
 	clc
 	adc     #$20
-	bcc     L0008
+	bcc     L0010
 	inx
-L0008:	jsr     _multi_vram_buffer_horz
+L0010:	jsr     _multi_vram_buffer_horz
 ;
 ; set_attribute(0x01);
 ;
-	.dbg	line, "src/conditions.c", 73
+	.dbg	line, "src/conditions.c", 87
 	lda     #$01
 	jmp     _set_attribute
 
@@ -318,21 +373,21 @@ L0008:	jsr     _multi_vram_buffer_horz
 ;
 ; if (unlocked[temp_cond]) return;
 ;
-	.dbg	line, "src/conditions.c", 77
+	.dbg	line, "src/conditions.c", 91
 	ldy     _temp_cond
 	lda     _unlocked,y
 	bne     L0006
 ;
 ; unlocked[temp_cond] = 1;
 ;
-	.dbg	line, "src/conditions.c", 78
+	.dbg	line, "src/conditions.c", 92
 	ldy     _temp_cond
 	lda     #$01
 	sta     _unlocked,y
 ;
 ; for(i_cond = 0; (temp_cond_2 = unlockables[temp_cond][i_cond]) != CondTotal; i_cond++) {
 ;
-	.dbg	line, "src/conditions.c", 79
+	.dbg	line, "src/conditions.c", 93
 	lda     #$00
 	sta     _i_cond
 	tax
@@ -354,7 +409,7 @@ L0014:	adc     #<(_unlockables)
 ;
 ; for(j_cond = 0; j < num_conditions_in_pool; j++) {
 ;
-	.dbg	line, "src/conditions.c", 80
+	.dbg	line, "src/conditions.c", 94
 	lda     #$00
 	sta     _j_cond
 	tax
@@ -364,7 +419,7 @@ L0016:	lda     _j
 ;
 ; if (condition_pool[j_cond] == temp_cond_2) break;
 ;
-	.dbg	line, "src/conditions.c", 81
+	.dbg	line, "src/conditions.c", 95
 	ldy     _j_cond
 	lda     _condition_pool,y
 	cmp     _temp_cond_2
@@ -372,32 +427,32 @@ L0016:	lda     _j
 ;
 ; for(j_cond = 0; j < num_conditions_in_pool; j++) {
 ;
-	.dbg	line, "src/conditions.c", 80
+	.dbg	line, "src/conditions.c", 94
 	inc     _j
 	jmp     L0016
 ;
 ; if (j == num_conditions_in_pool) {
 ;
-	.dbg	line, "src/conditions.c", 83
+	.dbg	line, "src/conditions.c", 97
 L0017:	lda     _j
 	cmp     _num_conditions_in_pool
 	bne     L0018
 ;
 ; condition_pool[num_conditions_in_pool] = temp_cond_2;
 ;
-	.dbg	line, "src/conditions.c", 84
+	.dbg	line, "src/conditions.c", 98
 	ldy     _num_conditions_in_pool
 	lda     _temp_cond_2
 	sta     _condition_pool,y
 ;
 ; num_conditions_in_pool++;
 ;
-	.dbg	line, "src/conditions.c", 85
+	.dbg	line, "src/conditions.c", 99
 	inc     _num_conditions_in_pool
 ;
 ; cond_pool_weight += weights[temp_cond_2];
 ;
-	.dbg	line, "src/conditions.c", 86
+	.dbg	line, "src/conditions.c", 100
 	ldy     _temp_cond_2
 	lda     _weights,y
 	clc
@@ -406,13 +461,13 @@ L0017:	lda     _j
 ;
 ; for(i_cond = 0; (temp_cond_2 = unlockables[temp_cond][i_cond]) != CondTotal; i_cond++) {
 ;
-	.dbg	line, "src/conditions.c", 79
+	.dbg	line, "src/conditions.c", 93
 L0018:	inc     _i_cond
 	jmp     L0015
 ;
 ; }
 ;
-	.dbg	line, "src/conditions.c", 89
+	.dbg	line, "src/conditions.c", 103
 L0006:	rts
 
 	.dbg	line
@@ -433,14 +488,14 @@ L0006:	rts
 ;
 ; temp = subrand8(cond_pool_weight);
 ;
-	.dbg	line, "src/conditions.c", 92
+	.dbg	line, "src/conditions.c", 106
 	lda     _cond_pool_weight
 	jsr     _subrand8
 	sta     _temp
 ;
 ; for(i_cond = 0; i_cond < num_conditions_in_pool; i_cond) {
 ;
-	.dbg	line, "src/conditions.c", 93
+	.dbg	line, "src/conditions.c", 107
 	lda     #$00
 	sta     _i_cond
 	tax
@@ -450,14 +505,14 @@ L000A:	lda     _i_cond
 ;
 ; temp_cond = condition_pool[i_cond];
 ;
-	.dbg	line, "src/conditions.c", 94
+	.dbg	line, "src/conditions.c", 108
 	ldy     _i_cond
 	lda     _condition_pool,y
 	sta     _temp_cond
 ;
 ; if (temp < weights[temp_cond]) return temp_cond;
 ;
-	.dbg	line, "src/conditions.c", 95
+	.dbg	line, "src/conditions.c", 109
 	lda     _temp
 	ldy     _temp_cond
 	cmp     _weights,y
@@ -467,7 +522,7 @@ L000A:	lda     _i_cond
 ;
 ; temp -= weights[temp_cond];
 ;
-	.dbg	line, "src/conditions.c", 96
+	.dbg	line, "src/conditions.c", 110
 L0007:	ldy     _temp_cond
 	lda     _weights,y
 	eor     #$FF
@@ -477,17 +532,17 @@ L0007:	ldy     _temp_cond
 ;
 ; for(i_cond = 0; i_cond < num_conditions_in_pool; i_cond) {
 ;
-	.dbg	line, "src/conditions.c", 93
+	.dbg	line, "src/conditions.c", 107
 	jmp     L000A
 ;
 ; return CondConditioner; // should never happen
 ;
-	.dbg	line, "src/conditions.c", 98
+	.dbg	line, "src/conditions.c", 112
 L000B:	lda     #$00
 ;
 ; }
 ;
-	.dbg	line, "src/conditions.c", 99
+	.dbg	line, "src/conditions.c", 113
 	rts
 
 	.dbg	line
