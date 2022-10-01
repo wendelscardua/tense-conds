@@ -38,6 +38,7 @@ ${TARGET}: nes.cfg \
            src/metasprites.o \
            src/metatiles.o \
            src/conditions.o \
+           src/enemies.o \
            src/levels.o
 	ld65 -C $^ nes.lib -m map.txt -o ${TARGET} ${LD65_FLAGS}
 
@@ -118,6 +119,8 @@ src/level-state.s: src/level-state.c \
             src/nametables.h \
             src/attributes.h \
             src/conditions.h \
+            src/directions.h \
+            src/enemies.h \
             src/levels.h \
             src/globals.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
@@ -127,6 +130,12 @@ src/conditions.s: src/conditions.c \
                   src/lib/nesdoug.h \
                   src/lib/neslib.h \
                   src/attributes.h \
+                  src/globals.h \
+                  src/subrand.h
+	cc65 -Oirs $< --add-source ${CA65_FLAGS}
+
+src/enemies.s: src/enemies.c \
+                  src/enemies.h \
                   src/globals.h \
                   src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}

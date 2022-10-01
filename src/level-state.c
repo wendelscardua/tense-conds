@@ -16,19 +16,13 @@
 #include "music/soundtrack.h"
 #include "levels.h"
 #include "conditions.h"
+#include "directions.h"
+#include "enemies.h"
 
 typedef enum
   {
    PlayerEntity
   } entity_t;
-
-typedef enum
-  {
-   DirectionUp,
-   DirectionDown,
-   DirectionLeft,
-   DirectionRight
-  } direction_t;
 
 typedef enum
   {
@@ -105,8 +99,6 @@ void level_state_init() {
   unrle_to_buffer((unsigned char *) level_data);
   set_data_pointer(map);
 
-  init_conditions();
-
   temp_int = 0x2000;
   temp = 0;
   for(temp_y = 0; temp_y < 12; temp_y+=2) {
@@ -116,6 +108,9 @@ void level_state_init() {
       flush_vram_update2();
     }
   }
+
+  init_conditions();
+  init_enemies();
 
   k = 0;
   for(temp_y = 0; temp_y < 13; temp_y++) {
@@ -252,6 +247,7 @@ void level_state_update() {
   player_input();
 
   conditions_update();
+  update_enemies();
 
   // TODO: stuff
 
@@ -272,4 +268,6 @@ void level_state_update() {
     oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
     break;
   }
+
+  render_enemies();
 }

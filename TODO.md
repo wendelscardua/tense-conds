@@ -3,6 +3,7 @@
 - Game over
 - Spawn bats
 - Accelerate zombies and bats
+- Temporarily disable conds
 - Sword
 - Music
 - SFX
