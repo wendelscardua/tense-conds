@@ -22,8 +22,8 @@ void reset_attributes() {
 
 // coordinates given by temp_x, temp_y
 void set_attribute(unsigned char attribute) {
-  meta_y = temp_y >> 1;
-  meta_x = temp_x >> 1;
+  meta_y = temp_y;
+  meta_x = temp_x;
   attr_index = (meta_y / 2) * 32 / 4 + (meta_x / 2);
   attr_shift = 2 * ((meta_y % 2) * 2 + meta_x % 2);
   temp = attribute_table[attr_index];

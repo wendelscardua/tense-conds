@@ -124,6 +124,9 @@ src/level-state.s: src/level-state.c \
 
 src/conditions.s: src/conditions.c \
                   src/conditions.h \
+                  src/lib/nesdoug.h \
+                  src/lib/neslib.h \
+                  src/attributes.h \
                   src/globals.h \
                   src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}

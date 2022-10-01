@@ -108,12 +108,13 @@ void level_state_init() {
   init_conditions();
 
   k = 0;
-  for(i = 0; i < 13; i++) {
-    for(j = 0; j < 16; j++, k++) {
+  for(temp_y = 0; temp_y < 13; temp_y++) {
+    for(temp_x = 0; temp_x < 16; temp_x++, k++) {
       switch(map[k]) {
       case ConditionerMetatile:
         // Add conditioner
-        ADD_CONDITION(i, j, CondConditioner);
+        temp_cond = CondConditioner;
+        add_condition();
         break;
       }
     }
@@ -218,7 +219,17 @@ void conditions_update() {
       } else {
         one_vram_buffer(0xe5, temp_int + 1);
         condition_seconds[i] = 0;
-        // TODO: trigger
+        switch(condition_type[i]) {
+        case CondConditioner:
+          do {
+            temp_x = subrand8(16);
+            temp_y = subrand8(12);
+          } while(map_collision());
+          temp_cond = random_condition();
+          add_condition();
+          map[temp_y * 16 + temp_x] = WallMetatile; // conditions act as walls
+          break;
+        }
       }
     }
   }
