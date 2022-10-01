@@ -34,7 +34,8 @@ ${TARGET}: nes.cfg \
            src/chr-data.o \
            src/palettes.o \
            src/nametables.o \
-           src/metasprites.o
+           src/metasprites.o \
+           src/levels.o
 	ld65 -C $^ nes.lib -m map.txt -o ${TARGET} ${LD65_FLAGS}
 
 src/%.o: src/%.s
@@ -134,6 +135,9 @@ src/music/soundtrack.asm: src/music/soundtrack.txt
 
 src/music/soundtrack.txt: src/music/soundtrack.ftm
 	${FAMITRACKER} $^ -export $@
+
+src/levels.s: tools/compile-levels.rb assets/tiled $(wildcard assets/tiled/*)
+	ruby tools/compile-levels.rb assets/tiled $@
 
 %.donut: % tools/donut
 	tools/donut -f $< -o $@

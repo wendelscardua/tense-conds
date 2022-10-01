@@ -8,6 +8,7 @@ src/attributes.s
 src/gamestate.s
 src/globals.s
 src/level-state.s
+src/levels.s
 src/main.s
 src/title-state.s
 src/music/soundtrack.asm
