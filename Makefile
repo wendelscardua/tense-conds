@@ -35,6 +35,7 @@ ${TARGET}: nes.cfg \
            src/palettes.o \
            src/nametables.o \
            src/metasprites.o \
+           src/metatiles.o \
            src/levels.o
 	ld65 -C $^ nes.lib -m map.txt -o ${TARGET} ${LD65_FLAGS}
 
