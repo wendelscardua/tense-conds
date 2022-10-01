@@ -10,14 +10,16 @@
 	.importzp	sp, sreg, regsave, regbank
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
-	.dbg		file, "src/enemies.c", 1682, 1664661184
+	.dbg		file, "src/enemies.c", 1941, 1664662466
 	.dbg		file, "src/lib/neslib.h", 8412, 1664622739
+	.dbg		file, "src/lib/nesdoug.h", 6542, 1664622739
 	.dbg		file, "src/directions.h", 104, 1664659464
 	.dbg		file, "src/enemies.h", 231, 1664660403
 	.dbg		file, "src/globals.h", 543, 1664622739
 	.dbg		file, "src/subrand.h", 146, 1664641459
 	.dbg		file, "src/metasprites.h", 198, 1664629451
 	.dbg		sym, "oam_meta_spr", "00", extern, "_oam_meta_spr"
+	.dbg		sym, "get_frame_count", "00", extern, "_get_frame_count"
 	.dbg		sym, "temp", "00", extern, "_temp"
 	.dbg		sym, "i", "00", extern, "_i"
 	.dbg		sym, "temp_x", "00", extern, "_temp_x"
@@ -25,6 +27,7 @@
 	.dbg		sym, "subrand8", "00", extern, "_subrand8"
 	.dbg		sym, "metasprite_pointers", "00", extern, "_metasprite_pointers"
 	.import		_oam_meta_spr
+	.import		_get_frame_count
 	.export		_init_enemies
 	.export		_add_enemy
 	.export		_update_enemies
@@ -36,6 +39,7 @@
 	.import		_subrand8
 	.import		_metasprite_pointers
 	.export		_i_enemy
+	.export		_shuffled_enemy
 	.export		_enemy_x
 	.export		_enemy_y
 	.export		_enemy_direction
@@ -46,6 +50,8 @@
 .segment	"BSS"
 
 _i_enemy:
+	.res	1,$00
+_shuffled_enemy:
 	.res	1,$00
 _enemy_x:
 	.res	32,$00
@@ -75,7 +81,7 @@ _enemy_hp:
 ;
 ; for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 24
+	.dbg	line, "src/enemies.c", 25
 	lda     #$00
 	sta     _i_enemy
 L0007:	lda     _i_enemy
@@ -84,20 +90,20 @@ L0007:	lda     _i_enemy
 ;
 ; enemy_hp[i_enemy] = 0;
 ;
-	.dbg	line, "src/enemies.c", 25
+	.dbg	line, "src/enemies.c", 26
 	ldy     _i_enemy
 	lda     #$00
 	sta     _enemy_hp,y
 ;
 ; for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 24
+	.dbg	line, "src/enemies.c", 25
 	inc     _i_enemy
 	jmp     L0007
 ;
 ; }
 ;
-	.dbg	line, "src/enemies.c", 27
+	.dbg	line, "src/enemies.c", 28
 L0003:	rts
 
 	.dbg	line
@@ -119,12 +125,12 @@ L0003:	rts
 ;
 ; void add_enemy(enemy_t enemy) {
 ;
-	.dbg	line, "src/enemies.c", 29
+	.dbg	line, "src/enemies.c", 30
 	jsr     pusha
 ;
 ; for(i_enemy = 0; i < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 30
+	.dbg	line, "src/enemies.c", 31
 	lda     #$00
 	sta     _i_enemy
 L0011:	lda     _i
@@ -133,27 +139,27 @@ L0011:	lda     _i
 ;
 ; if (enemy_hp[i_enemy] == 0) break;
 ;
-	.dbg	line, "src/enemies.c", 31
+	.dbg	line, "src/enemies.c", 32
 	ldy     _i_enemy
 	lda     _enemy_hp,y
 	beq     L0012
 ;
 ; for(i_enemy = 0; i < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 30
+	.dbg	line, "src/enemies.c", 31
 	inc     _i_enemy
 	jmp     L0011
 ;
 ; if (i_enemy >= MAX_ENEMIES) return; // TODO: maybe overwrite another enemy?
 ;
-	.dbg	line, "src/enemies.c", 34
+	.dbg	line, "src/enemies.c", 35
 L0012:	lda     _i_enemy
 	cmp     #$10
 	jcs     L0001
 ;
 ; enemy_x[i_enemy] = temp_x * 16 * 256;
 ;
-	.dbg	line, "src/enemies.c", 36
+	.dbg	line, "src/enemies.c", 37
 	ldx     #$00
 	lda     _i_enemy
 	asl     a
@@ -180,7 +186,7 @@ L000E:	adc     #<(_enemy_x)
 ;
 ; enemy_y[i_enemy] = temp_y * 16 * 256;
 ;
-	.dbg	line, "src/enemies.c", 37
+	.dbg	line, "src/enemies.c", 38
 	ldx     #$00
 	lda     _i_enemy
 	asl     a
@@ -207,7 +213,7 @@ L000F:	adc     #<(_enemy_y)
 ;
 ; enemy_direction[i_enemy] = subrand8(4);
 ;
-	.dbg	line, "src/enemies.c", 38
+	.dbg	line, "src/enemies.c", 39
 	lda     #<(_enemy_direction)
 	ldx     #>(_enemy_direction)
 	clc
@@ -222,14 +228,14 @@ L0009:	jsr     pushax
 ;
 ; enemy_hp[i_enemy] = 1;
 ;
-	.dbg	line, "src/enemies.c", 39
+	.dbg	line, "src/enemies.c", 40
 	ldy     _i_enemy
 	lda     #$01
 	sta     _enemy_hp,y
 ;
 ; enemy_speed[i_enemy] = 1 * 256;
 ;
-	.dbg	line, "src/enemies.c", 40
+	.dbg	line, "src/enemies.c", 41
 	ldx     #$00
 	lda     _i_enemy
 	asl     a
@@ -250,7 +256,7 @@ L0010:	adc     #<(_enemy_speed)
 ;
 ; }
 ;
-	.dbg	line, "src/enemies.c", 41
+	.dbg	line, "src/enemies.c", 42
 L0001:	jmp     incsp1
 
 	.dbg	line
@@ -271,7 +277,7 @@ L0001:	jmp     incsp1
 ;
 ; for(i_enemy = 0; i < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 45
+	.dbg	line, "src/enemies.c", 46
 	lda     #$00
 	sta     _i_enemy
 L0008:	lda     _i
@@ -282,7 +288,7 @@ L0008:	lda     _i
 ;
 ; }
 ;
-	.dbg	line, "src/enemies.c", 50
+	.dbg	line, "src/enemies.c", 51
 L0003:	rts
 
 	.dbg	line
@@ -301,37 +307,66 @@ L0003:	rts
 .segment	"CODE"
 
 ;
+; shuffled_enemy = get_frame_count() & 0x0f;
+;
+	.dbg	line, "src/enemies.c", 54
+	jsr     _get_frame_count
+	and     #$0F
+	sta     _shuffled_enemy
+;
 ; for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 53
+	.dbg	line, "src/enemies.c", 55
 	lda     #$00
 	sta     _i_enemy
-L0018:	lda     _i_enemy
+L0019:	lda     _i_enemy
 	cmp     #$10
-	bcc     L001A
+	bcc     L001B
 ;
 ; }
 ;
-	.dbg	line, "src/enemies.c", 72
+	.dbg	line, "src/enemies.c", 78
 	rts
 ;
-; if (enemy_hp[i_enemy] == 0) continue;
+; shuffled_enemy += 5; // coprime with MAX_ENEMIES
 ;
-	.dbg	line, "src/enemies.c", 54
-L001A:	ldy     _i_enemy
+	.dbg	line, "src/enemies.c", 56
+L001B:	lda     #$05
+	clc
+	adc     _shuffled_enemy
+	sta     _shuffled_enemy
+;
+; if (shuffled_enemy >= MAX_ENEMIES) {
+;
+	.dbg	line, "src/enemies.c", 57
+	cmp     #$10
+	bcc     L0006
+;
+; shuffled_enemy -= MAX_ENEMIES;;
+;
+	.dbg	line, "src/enemies.c", 58
+	lda     _shuffled_enemy
+	sec
+	sbc     #$10
+	sta     _shuffled_enemy
+;
+; if (enemy_hp[shuffled_enemy] == 0) continue;
+;
+	.dbg	line, "src/enemies.c", 60
+L0006:	ldy     _shuffled_enemy
 	lda     _enemy_hp,y
-	jeq     L0019
+	jeq     L001A
 ;
-; temp_x = enemy_x[i_enemy] >> 8;
+; temp_x = enemy_x[shuffled_enemy] >> 8;
 ;
-	.dbg	line, "src/enemies.c", 55
+	.dbg	line, "src/enemies.c", 61
 	ldx     #$00
-	lda     _i_enemy
+	lda     _shuffled_enemy
 	asl     a
-	bcc     L0015
+	bcc     L0016
 	inx
 	clc
-L0015:	adc     #<(_enemy_x)
+L0016:	adc     #<(_enemy_x)
 	sta     ptr1
 	txa
 	adc     #>(_enemy_x)
@@ -340,16 +375,16 @@ L0015:	adc     #<(_enemy_x)
 	lda     (ptr1),y
 	sta     _temp_x
 ;
-; temp_y = (enemy_y[i_enemy] >> 8) - 1;
+; temp_y = (enemy_y[shuffled_enemy] >> 8) - 1;
 ;
-	.dbg	line, "src/enemies.c", 56
+	.dbg	line, "src/enemies.c", 62
 	ldx     #$00
-	lda     _i_enemy
+	lda     _shuffled_enemy
 	asl     a
-	bcc     L0016
+	bcc     L0017
 	inx
 	clc
-L0016:	adc     #<(_enemy_y)
+L0017:	adc     #<(_enemy_y)
 	sta     ptr1
 	txa
 	adc     #>(_enemy_y)
@@ -359,24 +394,24 @@ L0016:	adc     #<(_enemy_y)
 	sbc     #$01
 	sta     _temp_y
 ;
-; switch(enemy_type[i_enemy]) {
+; switch(enemy_type[shuffled_enemy]) {
 ;
-	.dbg	line, "src/enemies.c", 58
-	ldy     _i_enemy
+	.dbg	line, "src/enemies.c", 64
+	ldy     _shuffled_enemy
 	lda     _enemy_type,y
 ;
 ; }
 ;
-	.dbg	line, "src/enemies.c", 70
-	beq     L000C
+	.dbg	line, "src/enemies.c", 76
+	beq     L000D
 	cmp     #$01
-	beq     L0019
-	jmp     L0019
+	beq     L001A
+	jmp     L001A
 ;
-; temp = ZOMBIE_WALK + 2 * enemy_direction[i_enemy];
+; temp = ZOMBIE_WALK + 2 * enemy_direction[shuffled_enemy];
 ;
-	.dbg	line, "src/enemies.c", 60
-L000C:	ldy     _i_enemy
+	.dbg	line, "src/enemies.c", 66
+L000D:	ldy     _shuffled_enemy
 	lda     _enemy_direction,y
 	asl     a
 	clc
@@ -385,21 +420,21 @@ L000C:	ldy     _i_enemy
 ;
 ; if ((temp_x ^ temp_y) & 0b100) {
 ;
-	.dbg	line, "src/enemies.c", 61
+	.dbg	line, "src/enemies.c", 67
 	lda     _temp_y
 	eor     _temp_x
 	and     #$04
-	beq     L000F
+	beq     L0010
 ;
 ; temp++;
 ;
-	.dbg	line, "src/enemies.c", 62
+	.dbg	line, "src/enemies.c", 68
 	inc     _temp
 ;
 ; oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
 ;
-	.dbg	line, "src/enemies.c", 64
-L000F:	jsr     decsp2
+	.dbg	line, "src/enemies.c", 70
+L0010:	jsr     decsp2
 	lda     _temp_x
 	ldy     #$01
 	sta     (sp),y
@@ -409,10 +444,10 @@ L000F:	jsr     decsp2
 	ldx     #$00
 	lda     _temp
 	asl     a
-	bcc     L0017
+	bcc     L0018
 	inx
 	clc
-L0017:	adc     #<(_metasprite_pointers)
+L0018:	adc     #<(_metasprite_pointers)
 	sta     ptr1
 	txa
 	adc     #>(_metasprite_pointers)
@@ -426,9 +461,9 @@ L0017:	adc     #<(_metasprite_pointers)
 ;
 ; for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
 ;
-	.dbg	line, "src/enemies.c", 53
-L0019:	inc     _i_enemy
-	jmp     L0018
+	.dbg	line, "src/enemies.c", 55
+L001A:	inc     _i_enemy
+	jmp     L0019
 
 	.dbg	line
 .endproc

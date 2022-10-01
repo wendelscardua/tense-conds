@@ -137,6 +137,7 @@ src/conditions.s: src/conditions.c \
 src/enemies.s: src/enemies.c \
                   src/enemies.h \
                   src/lib/neslib.h \
+                  src/lib/nesdoug.h \
                   src/globals.h \
                   src/metasprites.h \
                   src/subrand.h

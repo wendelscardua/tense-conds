@@ -262,7 +262,8 @@ void level_state_update() {
 
   flush_attributes();
 
-  // TODO: render sprites
+  render_enemies();
+
   temp_x = player_x;
   temp_y = player_y - 1;
   switch(player_action) {
@@ -277,6 +278,4 @@ void level_state_update() {
     oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
     break;
   }
-
-  render_enemies();
 }

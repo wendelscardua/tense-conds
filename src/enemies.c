@@ -1,4 +1,5 @@
 #include "lib/neslib.h"
+#include "lib/nesdoug.h"
 #include "directions.h"
 #include "enemies.h"
 #include "globals.h"
@@ -6,7 +7,7 @@
 #include "metasprites.h"
 
 #pragma bss-name(push, "BSS")
-unsigned char i_enemy;
+unsigned char i_enemy, shuffled_enemy;
 #pragma bss-name(pop)
 
 #pragma bss-name(push, "BSS")
@@ -50,14 +51,19 @@ void update_enemies() {
 }
 
 void render_enemies() {
+  shuffled_enemy = get_frame_count() & 0x0f;
   for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
-    if (enemy_hp[i_enemy] == 0) continue;
-    temp_x = enemy_x[i_enemy] >> 8;
-    temp_y = (enemy_y[i_enemy] >> 8) - 1;
+    shuffled_enemy += 5; // coprime with MAX_ENEMIES
+    if (shuffled_enemy >= MAX_ENEMIES) {
+      shuffled_enemy -= MAX_ENEMIES;;
+    }
+    if (enemy_hp[shuffled_enemy] == 0) continue;
+    temp_x = enemy_x[shuffled_enemy] >> 8;
+    temp_y = (enemy_y[shuffled_enemy] >> 8) - 1;
 
-    switch(enemy_type[i_enemy]) {
+    switch(enemy_type[shuffled_enemy]) {
     case ZombieEnemy:
-      temp = ZOMBIE_WALK + 2 * enemy_direction[i_enemy];
+      temp = ZOMBIE_WALK + 2 * enemy_direction[shuffled_enemy];
       if ((temp_x ^ temp_y) & 0b100) {
         temp++;
       }
