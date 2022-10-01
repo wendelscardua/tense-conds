@@ -41,11 +41,28 @@ unsigned char player_x, player_y;
 direction_t player_direction;
 action_t player_action;
 char * level_data;
+
+char num_conditions;
 #pragma bss-name(pop)
 
 #pragma bss-name(push, "BSS")
 
 char map[13 * 16];
+
+#define MAX_CONDITIONS 16
+
+typedef enum
+  {
+   CondConditioner,
+   CondZombieSpawner,
+   CondTotal
+  } condition_t;
+
+char condition_row[MAX_CONDITIONS];
+char condition_column[MAX_CONDITIONS];
+char condition_seconds[MAX_CONDITIONS];
+char condition_frames[MAX_CONDITIONS];
+condition_t condition_type[MAX_CONDITIONS];
 
 #pragma bss-name(pop)
 
@@ -104,12 +121,20 @@ void level_state_init() {
   unrle_to_buffer((unsigned char *) level_data);
   set_data_pointer(map);
 
+  num_conditions = 0;
+
   k = 0;
   for(i = 0; i < 13; i++) {
     for(j = 0; j < 16; j++, k++) {
       switch(map[k]) {
       case ConditionerMetatile:
-        // TODO add instance of conditioner
+        // Add conditioner
+        condition_row[num_conditions] = i;
+        condition_column[num_conditions] = j;
+        condition_type[num_conditions] = CondConditioner;
+        condition_seconds[num_conditions] = 0;
+        condition_frames[num_conditions] = subrand8(16); // small variation on timer
+        num_conditions++;
         break;
       }
     }
@@ -136,9 +161,7 @@ void level_state_deinit() {
   ppu_off();
 }
 
-void level_state_update() {
-  oam_clear();
-
+void player_input() {
   switch(player_action) {
   case ActionIdle:
     pad_poll(0);
@@ -195,6 +218,39 @@ void level_state_update() {
 
     break;
   }
+}
+
+void conditions_update() {
+  for(i = 0; i < num_conditions; i++) {
+    if (condition_frames[i]++ >= 60) {
+      condition_frames[i] = 0;
+      temp_x = condition_column[i];
+      temp_y = condition_row[i];
+      temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
+
+      temp = ++condition_seconds[i];
+      if (temp == 1) {
+        one_vram_buffer(0xf1, temp_int++);
+        one_vram_buffer(0xe0, temp_int);
+      } else if (temp < 6) {
+        one_vram_buffer(0xf0 + temp, temp_int);
+      } else if (temp < 10) {
+        one_vram_buffer(0xe0 - 5 + temp, temp_int + 1);
+      } else {
+        one_vram_buffer(0xe5, temp_int + 1);
+        condition_seconds[i] = 0;
+        // TODO: trigger
+      }
+    }
+  }
+}
+
+void level_state_update() {
+  oam_clear();
+
+  player_input();
+
+  conditions_update();
 
   // TODO: stuff
 
