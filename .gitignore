@@ -1,0 +1,17 @@
+*.dbg
+*.nes
+*.o
+*.donut
+*.tiled-session
+map.txt
+src/attributes.s
+src/gamestate.s
+src/globals.s
+src/level-state.s
+src/main.s
+src/title-state.s
+src/music/soundtrack.asm
+src/music/soundtrack_dpcm.asm
+src/music/soundtrack.txt
+tools/ld65-map.json
+tools/donut
