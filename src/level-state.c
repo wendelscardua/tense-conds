@@ -15,6 +15,7 @@
 #include "ggsound/ggsound-api.h"
 #include "music/soundtrack.h"
 #include "levels.h"
+#include "conditions.h"
 
 typedef enum
   {
@@ -41,28 +42,11 @@ unsigned char player_x, player_y;
 direction_t player_direction;
 action_t player_action;
 char * level_data;
-
-char num_conditions;
 #pragma bss-name(pop)
 
 #pragma bss-name(push, "BSS")
 
 char map[13 * 16];
-
-#define MAX_CONDITIONS 16
-
-typedef enum
-  {
-   CondConditioner,
-   CondZombieSpawner,
-   CondTotal
-  } condition_t;
-
-char condition_row[MAX_CONDITIONS];
-char condition_column[MAX_CONDITIONS];
-char condition_seconds[MAX_CONDITIONS];
-char condition_frames[MAX_CONDITIONS];
-condition_t condition_type[MAX_CONDITIONS];
 
 #pragma bss-name(pop)
 
@@ -121,7 +105,7 @@ void level_state_init() {
   unrle_to_buffer((unsigned char *) level_data);
   set_data_pointer(map);
 
-  num_conditions = 0;
+  init_conditions();
 
   k = 0;
   for(i = 0; i < 13; i++) {
@@ -129,12 +113,7 @@ void level_state_init() {
       switch(map[k]) {
       case ConditionerMetatile:
         // Add conditioner
-        condition_row[num_conditions] = i;
-        condition_column[num_conditions] = j;
-        condition_type[num_conditions] = CondConditioner;
-        condition_seconds[num_conditions] = 0;
-        condition_frames[num_conditions] = subrand8(16); // small variation on timer
-        num_conditions++;
+        ADD_CONDITION(i, j, CondConditioner);
         break;
       }
     }
