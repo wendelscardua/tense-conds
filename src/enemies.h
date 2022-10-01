@@ -10,6 +10,7 @@ typedef enum
   } enemy_t;
 
 void init_enemies();
+void add_enemy(enemy_t enemy);
 void update_enemies();
 void render_enemies();
 

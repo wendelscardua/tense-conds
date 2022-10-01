@@ -111,130 +111,120 @@ metasprite_playerWalkRight1_data:
 metasprite_enemyWalkUp1_data:
 
 
-.byte   0,  0,$28,0
-.byte   8,  0,$29,0
-.byte   0,  8,$38,0
-.byte   8,  8,$39,0
+.byte   0,  0,$28,1
+.byte   8,  0,$29,1
+.byte   0,  8,$38,1
+.byte   8,  8,$39,1
 .byte $80
 
 
 metasprite_enemyWalkUp2_data:
 
 
-.byte   8,  0,$28,0|OAM_FLIP_H
-.byte   0,  0,$29,0|OAM_FLIP_H
-.byte   8,  8,$38,0|OAM_FLIP_H
-.byte   0,  8,$39,0|OAM_FLIP_H
+.byte   8,  0,$28,1|OAM_FLIP_H
+.byte   0,  0,$29,1|OAM_FLIP_H
+.byte   8,  8,$38,1|OAM_FLIP_H
+.byte   0,  8,$39,1|OAM_FLIP_H
 .byte $80
 
 
 metasprite_enemyWalkDown1_data:
 
 
-.byte   0,  0,$26,0
-.byte   8,  0,$27,0
-.byte   0,  8,$36,0
-.byte   8,  8,$37,0
+.byte   0,  0,$26,1
+.byte   8,  0,$27,1
+.byte   0,  8,$36,1
+.byte   8,  8,$37,1
 .byte $80
 
 
 metasprite_enemyWalkDown2_data:
 
 
-.byte   8,  0,$26,0|OAM_FLIP_H
-.byte   0,  0,$27,0|OAM_FLIP_H
-.byte   8,  8,$36,0|OAM_FLIP_H
-.byte   0,  8,$37,0|OAM_FLIP_H
+.byte   8,  0,$26,1|OAM_FLIP_H
+.byte   0,  0,$27,1|OAM_FLIP_H
+.byte   8,  8,$36,1|OAM_FLIP_H
+.byte   0,  8,$37,1|OAM_FLIP_H
 .byte $80
 
 
 metasprite_enemyWalkLeft1_data:
 
 
-.byte   0,  0,$2a,0
-.byte   8,  0,$2b,0
-.byte   0,  8,$3a,0
-.byte   8,  8,$3b,0
+.byte   0,  0,$2a,1
+.byte   8,  0,$2b,1
+.byte   0,  8,$3a,1
+.byte   8,  8,$3b,1
 .byte $80
 
 
 metasprite_enemyWalkLeft2_data:
 
 
-.byte   0,  0,$24,0
-.byte   8,  0,$25,0
-.byte   0,  8,$34,0
-.byte   8,  8,$35,0
+.byte   0,  0,$24,1
+.byte   8,  0,$25,1
+.byte   0,  8,$34,1
+.byte   8,  8,$35,1
 .byte $80
 
 
 metasprite_enemyWalkRight1_data:
 
 
-.byte   8,  0,$2a,0|OAM_FLIP_H
-.byte   0,  0,$2b,0|OAM_FLIP_H
-.byte   8,  8,$3a,0|OAM_FLIP_H
-.byte   0,  8,$3b,0|OAM_FLIP_H
+.byte   8,  0,$2a,1|OAM_FLIP_H
+.byte   0,  0,$2b,1|OAM_FLIP_H
+.byte   8,  8,$3a,1|OAM_FLIP_H
+.byte   0,  8,$3b,1|OAM_FLIP_H
 .byte $80
 
 
 metasprite_enemyWalkRight2_data:
 
 
-.byte   8,  0,$24,0|OAM_FLIP_H
-.byte   0,  0,$25,0|OAM_FLIP_H
-.byte   8,  8,$34,0|OAM_FLIP_H
-.byte   0,  8,$35,0|OAM_FLIP_H
+.byte   8,  0,$24,1|OAM_FLIP_H
+.byte   0,  0,$25,1|OAM_FLIP_H
+.byte   8,  8,$34,1|OAM_FLIP_H
+.byte   0,  8,$35,1|OAM_FLIP_H
 .byte $80
 
 
 metasprite_flyerLeft1_data:
 
 
-.byte   0,  0,$0c,0
-.byte   8,  0,$0d,0
-.byte   0,  8,$1c,0
-.byte   8,  8,$1d,0
+.byte   0,  0,$0c,2
+.byte   8,  0,$0d,2
+.byte   0,  8,$1c,2
+.byte   8,  8,$1d,2
 .byte $80
 
 
 metasprite_flyerLeft2_data:
 
 
-.byte   0,  0,$2c,0
-.byte   8,  0,$2d,0
-.byte   0,  8,$3c,0
-.byte   8,  8,$3d,0
+.byte   0,  0,$2c,2
+.byte   8,  0,$2d,2
+.byte   0,  8,$3c,2
+.byte   8,  8,$3d,2
 .byte $80
 
 
 metasprite_flyerRight1_data:
 
 
-.byte   8,  0,$0c,0|OAM_FLIP_H
-.byte   0,  0,$0d,0|OAM_FLIP_H
-.byte   8,  8,$1c,0|OAM_FLIP_H
-.byte   0,  8,$1d,0|OAM_FLIP_H
+.byte   8,  0,$0c,2|OAM_FLIP_H
+.byte   0,  0,$0d,2|OAM_FLIP_H
+.byte   8,  8,$1c,2|OAM_FLIP_H
+.byte   0,  8,$1d,2|OAM_FLIP_H
 .byte $80
 
 
 metasprite_flyerRight2_data:
 
 
-.byte   8,  0,$2c,0|OAM_FLIP_H
-.byte   0,  0,$2d,0|OAM_FLIP_H
-.byte   8,  8,$3c,0|OAM_FLIP_H
-.byte   0,  8,$3d,0|OAM_FLIP_H
-.byte $80
-
-
-metasprite_Metasprite22_data:
-
-
-.byte   8,  0,$2c,0|OAM_FLIP_H
-.byte   0,  0,$2d,0|OAM_FLIP_H
-.byte   8,  8,$3c,0|OAM_FLIP_H
-.byte   0,  8,$3d,0|OAM_FLIP_H
+.byte   8,  0,$2c,2|OAM_FLIP_H
+.byte   0,  0,$2d,2|OAM_FLIP_H
+.byte   8,  8,$3c,2|OAM_FLIP_H
+.byte   0,  8,$3d,2|OAM_FLIP_H
 .byte $80
 
 

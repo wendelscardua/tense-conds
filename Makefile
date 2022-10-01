@@ -136,7 +136,9 @@ src/conditions.s: src/conditions.c \
 
 src/enemies.s: src/enemies.c \
                   src/enemies.h \
+                  src/lib/neslib.h \
                   src/globals.h \
+                  src/metasprites.h \
                   src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 

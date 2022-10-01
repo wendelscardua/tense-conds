@@ -228,6 +228,13 @@ void conditions_update() {
           add_condition();
           map[temp_y * 16 + temp_x] = WallMetatile; // conditions act as walls
           break;
+        case CondZombieSpawner:
+          do {
+            temp_x = subrand8(16);
+            temp_y = subrand8(12);
+          } while(map_collision());
+          add_enemy(ZombieEnemy);
+          break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {
           // TODO: delay shutting down
