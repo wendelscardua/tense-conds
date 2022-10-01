@@ -240,6 +240,8 @@ void conditions_update() {
           // TODO: delay shutting down
           multi_vram_buffer_horz(metatiles + 5, 2, temp_int);
           multi_vram_buffer_horz(metatiles + 7, 2, temp_int + 0x20);
+          temp_x = condition_column[i];
+          temp_y = condition_row[i];
           set_attribute(0x00);
           map[temp_y * 16 + temp_x] = FloorMetatile;
         }
