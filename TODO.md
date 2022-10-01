@@ -1,0 +1,15 @@
+- Spawn zombies
+- Damage
+- Game over
+- Spawn bats
+- Accelerate zombies and bats
+- Sword
+- Music
+- SFX
+- Title screen
+- Display seed
+- Input seed
+- Score
+- High Score
+- High Score checksum {include bits from the seed, kinda prevents cheating}
+- Maybe precompute list of free spaces?
