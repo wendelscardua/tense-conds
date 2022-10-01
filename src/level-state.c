@@ -107,6 +107,16 @@ void level_state_init() {
 
   init_conditions();
 
+  temp_int = 0x2000;
+  temp = 0;
+  for(temp_y = 0; temp_y < 12; temp_y+=2) {
+    for(temp_x = 0; temp_x < 16; temp_x+=2) {
+      temp_int = 0x2000 + 2 * temp_x + 0x40 * temp_y;
+      buffer_4_mt(temp_int, (temp_y << 4) | temp_x);
+      flush_vram_update2();
+    }
+  }
+
   k = 0;
   for(temp_y = 0; temp_y < 13; temp_y++) {
     for(temp_x = 0; temp_x < 16; temp_x++, k++) {
@@ -118,16 +128,6 @@ void level_state_init() {
         map[k] = WallMetatile;
         break;
       }
-    }
-  }
-
-  temp_int = 0x2000;
-  temp = 0;
-  for(temp_y = 0; temp_y < 12; temp_y+=2) {
-    for(temp_x = 0; temp_x < 16; temp_x+=2) {
-      temp_int = 0x2000 + 2 * temp_x + 0x40 * temp_y;
-      buffer_4_mt(temp_int, (temp_y << 4) | temp_x);
-      flush_vram_update2();
     }
   }
 
