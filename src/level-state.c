@@ -115,6 +115,7 @@ void level_state_init() {
         // Add conditioner
         temp_cond = CondConditioner;
         add_condition();
+        map[k] = WallMetatile;
         break;
       }
     }
