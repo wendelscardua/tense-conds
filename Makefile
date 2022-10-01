@@ -125,7 +125,8 @@ src/palettes.o: src/palettes.s src/palettes.h $(wildcard assets/*.pal)
 	ca65 $< ${CA65_FLAGS}
 
 src/chr-data.o: src/chr-data.s src/chr-data.h \
-                assets/gameplay.chr.donut
+                assets/gameplay-bg.chr.donut \
+                assets/gameplay-spr.chr.donut
 	ca65 $< ${CA65_FLAGS}
 
 src/music/soundtrack.o: src/music/soundtrack.s src/music/soundtrack.asm

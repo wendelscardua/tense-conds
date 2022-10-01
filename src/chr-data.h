@@ -6,6 +6,7 @@
 #define PPU_PATTERN_TABLE_1 0x1000
 #define PPU_PATTERN_TABLE_SIZE 4096
 
-extern const unsigned char gameplay_chr[];
+extern const unsigned char gameplay_bg_chr[];
+extern const unsigned char gameplay_spr_chr[];
 
 #endif

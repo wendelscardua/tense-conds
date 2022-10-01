@@ -25,11 +25,11 @@ void level_state_init() {
   oam_size(1);
 
   vram_adr(PPU_PATTERN_TABLE_0);
-  donut_stream_ptr = &gameplay_chr;
+  donut_stream_ptr = &gameplay_bg_chr;
   donut_decompress_to_ppu(PPU_PATTERN_TABLE_SIZE / 64);
 
   vram_adr(PPU_PATTERN_TABLE_1);
-  donut_stream_ptr = &gameplay_chr;
+  donut_stream_ptr = &gameplay_spr_chr;
   donut_decompress_to_ppu(PPU_PATTERN_TABLE_SIZE / 64);
 
   vram_adr(NTADR_A(0,0));
