@@ -36,7 +36,8 @@ typedef enum
   } action_t;
 
 #pragma bss-name(push, "ZEROPAGE")
-unsigned char player_row, player_column, player_x, player_y;
+unsigned char player_row, player_column;
+unsigned char player_x, player_y;
 direction_t player_direction;
 action_t player_action;
 char * level_data;
@@ -47,6 +48,11 @@ char * level_data;
 char map[13 * 16];
 
 #pragma bss-name(pop)
+
+// input is temp_x column, temp_y row
+unsigned char map_collision() {
+  return map[temp_y * 16 + temp_x] == WallMetatile;
+}
 
 void level_state_init() {
   oam_size(0);
@@ -83,8 +89,8 @@ void level_state_init() {
     case PlayerEntity:
       player_column = *level_data++;
       player_row = *level_data++;
-      player_x = player_column * 16;
-      player_y = player_row * 16;
+      player_x = (player_column * 16);
+      player_y = (player_row * 16);
       player_direction = DirectionDown;
       player_action = ActionIdle;
       break;
@@ -130,25 +136,83 @@ void level_state_deinit() {
   ppu_off();
 }
 
-
 void level_state_update() {
   oam_clear();
+
+  switch(player_action) {
+  case ActionIdle:
+    pad_poll(0);
+    pad = pad_state(0);
+    pad_new = get_pad_new(0);
+
+    temp_x = player_column;
+    temp_y = player_row;
+    if (pad & PAD_UP) {
+      player_direction = DirectionUp;
+      temp_y--;
+      if (!map_collision()) {
+        player_row = temp_y;
+        player_action = ActionMoving;
+      }
+    } else if (pad & PAD_DOWN) {
+      player_direction = DirectionDown;
+      temp_y++;
+      if (!map_collision()) {
+        player_row = temp_y;
+        player_action = ActionMoving;
+      }
+    } else if (pad & PAD_LEFT) {
+      player_direction = DirectionLeft;
+      temp_x--;
+      if (!map_collision()) {
+        player_column = temp_x;
+        player_action = ActionMoving;
+      }
+    } else if (pad & PAD_RIGHT) {
+      player_direction = DirectionRight;
+      temp_x++;
+      if (!map_collision()) {
+        player_column = temp_x;
+        player_action = ActionMoving;
+      }
+    }
+
+    break;
+  case ActionMoving:
+    temp_x = player_column * 16;
+    temp_y = player_row * 16;
+    if (player_x < temp_x) {
+      player_x++;
+    } else if (player_x > temp_x) {
+      player_x--;
+    } else if (player_y < temp_y) {
+      player_y++;
+    } else if (player_y > temp_y) {
+      player_y--;
+    } else {
+      player_action = ActionIdle;
+    }
+
+    break;
+  }
 
   // TODO: stuff
 
   flush_attributes();
 
   // TODO: render sprites
+  temp_x = player_x;
+  temp_y = player_y - 1;
   switch(player_action) {
   case ActionIdle:
-    oam_meta_spr(player_x, player_y - 1, metasprite_pointers[PLAYER_IDLE + player_direction]);
+    oam_meta_spr(temp_x, temp_y, metasprite_pointers[PLAYER_IDLE + player_direction]);
     break;
   case ActionMoving:
     temp = PLAYER_WALK + 2 * player_direction;
-    if ((player_x ^ player_y) & 0b1) {
+    if ((temp_x ^ temp_y) & 0b100) {
       temp++;
     }
-    oam_meta_spr(player_x, player_y - 1, metasprite_pointers[temp]);
+    oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
     break;
   }
 }
