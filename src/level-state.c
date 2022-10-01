@@ -21,8 +21,24 @@ typedef enum
    PlayerEntity
   } entity_t;
 
+typedef enum
+  {
+   DirectionUp,
+   DirectionDown,
+   DirectionLeft,
+   DirectionRight
+  } direction_t;
+
+typedef enum
+  {
+   ActionIdle,
+   ActionMoving
+  } action_t;
+
 #pragma bss-name(push, "ZEROPAGE")
 unsigned char player_row, player_column, player_x, player_y;
+direction_t player_direction;
+action_t player_action;
 char * level_data;
 #pragma bss-name(pop)
 
@@ -33,7 +49,7 @@ char map[13 * 16];
 #pragma bss-name(pop)
 
 void level_state_init() {
-  oam_size(1);
+  oam_size(0);
 
   vram_adr(PPU_PATTERN_TABLE_0);
   donut_stream_ptr = &gameplay_bg_chr;
@@ -69,6 +85,8 @@ void level_state_init() {
       player_row = *level_data++;
       player_x = player_column * 16;
       player_y = player_row * 16;
+      player_direction = DirectionDown;
+      player_action = ActionIdle;
       break;
     default:
       j = *level_data++;
@@ -121,4 +139,16 @@ void level_state_update() {
   flush_attributes();
 
   // TODO: render sprites
+  switch(player_action) {
+  case ActionIdle:
+    oam_meta_spr(player_x, player_y - 1, metasprite_pointers[PLAYER_IDLE + player_direction]);
+    break;
+  case ActionMoving:
+    temp = PLAYER_WALK + 2 * player_direction;
+    if ((player_x ^ player_y) & 0b1) {
+      temp++;
+    }
+    oam_meta_spr(player_x, player_y - 1, metasprite_pointers[temp]);
+    break;
+  }
 }
