@@ -249,7 +249,9 @@ _metasprite_pointers:
 .word metasprite_playerWalkDown1_data
 .word metasprite_playerWalkDown2_data
 .word metasprite_playerWalkLeft1_data
+.word metasprite_playerIdleLeft_data
 .word metasprite_playerWalkRight1_data
+.word metasprite_playerIdleRight_data
 .word metasprite_enemyWalkUp1_data
 .word metasprite_enemyWalkUp2_data
 .word metasprite_enemyWalkDown1_data
