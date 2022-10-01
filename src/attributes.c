@@ -45,6 +45,6 @@ void flush_attributes() {
     }
   }
   if (temp) {
-    multi_vram_buffer_horz(attribute_table + attr_index + 1, temp, 0x23c0 + attr_index + 1);
+    multi_vram_buffer_horz(attribute_table, temp, 0x23c0 + attr_index + 1);
   }
 }
