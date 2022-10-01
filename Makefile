@@ -19,6 +19,7 @@ ${TARGET}: nes.cfg \
            src/main.o \
            src/lib/neslib.o \
            src/lib/nesdoug.o \
+           src/lib/unrle.o \
            src/ggsound/ggsound.o \
            src/ggsound/ggsound-api.o \
            src/crt0.o \
@@ -105,14 +106,17 @@ src/level-state.s: src/level-state.c \
             src/lib/neslib.h \
             src/lib/nesdoug.h \
             src/lib/donut.h \
+            src/lib/unrle.h \
             src/ggsound/ggsound-api.h \
             src/music/soundtrack.h \
             src/subrand.h \
             src/metasprites.h \
+            src/metatiles.h \
             src/chr-data.h \
             src/palettes.h \
             src/nametables.h \
             src/attributes.h \
+            src/levels.h \
             src/globals.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
