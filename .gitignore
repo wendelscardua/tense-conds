@@ -5,6 +5,7 @@
 *.tiled-session
 map.txt
 src/attributes.s
+src/conditions.s
 src/gamestate.s
 src/globals.s
 src/level-state.s
