@@ -43,6 +43,14 @@ void add_enemy(enemy_t enemy) {
   enemy_speed[i_enemy] = 0x00b0;
 }
 
+unsigned char near_snap() {
+  temp = (temp_enemy_x >> 8) & 0x0f;
+  if (temp > 0x02 && temp < 0x0e) return 0;
+  temp = (temp_enemy_y >> 8) & 0x0f;
+  if (temp > 0x02 && temp < 0x0e) return 0;
+  return 1;
+}
+
 // TODO report collisions
 void update_enemies() {
   for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
@@ -59,6 +67,12 @@ void update_enemies() {
       // delete enemies clipping with new conds and stuff
       enemy_hp[i_enemy] = 0;
       continue;
+    }
+
+    if (map_fork() && near_snap() && rand8() < 16) {
+      enemy_direction[i_enemy] = subrand8(4);
+      temp_enemy_x = enemy_x[i_enemy] = temp_x << 4 << 8;
+      temp_enemy_y = enemy_y[i_enemy] = temp_y << 4 << 8;
     }
 
     switch(enemy_type[i_enemy]) {

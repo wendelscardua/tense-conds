@@ -5,5 +5,6 @@ extern char map[];
 
 // input is temp_x column, temp_y row
 unsigned char map_collision();
+unsigned char map_fork();
 
 #endif
