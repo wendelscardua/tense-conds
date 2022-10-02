@@ -108,7 +108,7 @@ void level_state_init() {
   }
 
   // TODO: fade in?
-        ppu_on_all();
+  ppu_on_all();
 
   ggsound_play_song(song_no_music);
 }

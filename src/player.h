@@ -6,10 +6,10 @@
 #define PLAYER_STARTING_LIVES 5
 #define HEART_TILE 0x71
 #define HEARTLESS_TILE 0x00
-#define LIVES_X 19
+#define LIVES_X 23
 #define LIVES_Y 26
 
-#define SCORE_X 9
+#define SCORE_X 10
 #define SCORE_Y 26
 
 #define PLAYER_IFRAMES 45
