@@ -4,7 +4,7 @@
 .importzp _i_enemy, _temp_enemy_x, _temp_enemy_y, _temp_x, _temp_y
 .importzp _player_x, _player_y
 .import _enemy_x, _enemy_y, _enemy_hp, _enemy_speed, _enemy_direction
-.import _map
+.import _map, _cond_map
 
 .import _rand8
 
@@ -14,6 +14,12 @@
   Wall
   Conditioner
   ForkedFloor
+.endenum
+
+.enum Conditions
+  Conditioner
+  ZombieSpawner
+  Total
 .endenum
 
 .segment "CODE"
@@ -119,17 +125,17 @@ no_collision:
 
   ; map[temp_x, temp_y]
 
-  lda _map, y
-  cmp #Metatile::Wall
+  lda _cond_map, y
+  cmp #Conditions::Total
 
-  bne no_wall
+  beq no_cond
 
   ; hp = 0, bail out
   lda #0
   ldx _i_enemy
   sta _enemy_hp, x
   rts
-no_wall:
+no_cond:
 
   cmp #Metatile::ForkedFloor
   bne no_fork
@@ -208,8 +214,15 @@ no_fork:
 
   lda _map, y
   cmp #Metatile::Wall
+  beq collided
 
-  bne move
+  lda _cond_map, y
+  cmp #Conditions::Total
+  bne collided
+
+  jmp move
+
+collided:
 
   ; collision = snap, turn
   jsr _rand8
@@ -259,8 +272,15 @@ move:
 
   lda _map, y
   cmp #Metatile::Wall
+  beq collided
 
-  bne move
+  lda _cond_map, y
+  cmp #Conditions::Total
+  bne collided
+
+  jmp move
+
+collided:
 
   ; collision = snap, turn
   jsr _rand8
@@ -314,8 +334,15 @@ move:
 
   lda _map, y
   cmp #Metatile::Wall
+  beq collided
 
-  bne move
+  lda _cond_map, y
+  cmp #Conditions::Total
+  bne collided
+
+  jmp move
+
+collided:
 
   ; collision = snap, turn
   jsr _rand8
@@ -367,8 +394,15 @@ move:
 
   lda _map, y
   cmp #Metatile::Wall
+  beq collided
 
-  bne move
+  lda _cond_map, y
+  cmp #Conditions::Total
+  bne collided
+
+  jmp move
+
+collided:
 
   ; collision = snap, turn
   jsr _rand8

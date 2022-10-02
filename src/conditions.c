@@ -148,8 +148,8 @@ void conditions_update() {
             temp_y = subrand8(12);
           } while(map_collision());
           temp_cond = random_condition();
+          cond_map[temp_y * 16 + temp_x] = temp_cond; // conditions act as walls
           add_condition();
-          map[temp_y * 16 + temp_x] = WallMetatile; // conditions act as walls
           break;
         case CondZombieSpawner:
           do {
@@ -166,7 +166,7 @@ void conditions_update() {
           temp_x = condition_column[i];
           temp_y = condition_row[i];
           set_attribute(0x00);
-          map[temp_y * 16 + temp_x] = FloorMetatile;
+          cond_map[temp_y * 16 + temp_x] = CondTotal;
         }
       }
     }

@@ -100,9 +100,11 @@ void level_state_init() {
       case ConditionerMetatile:
         // Add conditioner
         temp_cond = CondConditioner;
+        cond_map[k] = CondConditioner;
         add_condition();
-        map[k] = WallMetatile;
         break;
+      default:
+        cond_map[k] = CondTotal;
       }
     }
   }
