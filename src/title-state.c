@@ -29,6 +29,41 @@ void title_state_init() {
   donut_stream_ptr = &title_screen;
   donut_decompress_to_ppu(1024 / 64);
 
+  if (fixed_seed) {
+    one_vram_buffer(0x08, NTADR_A(17, 23));
+    one_vram_buffer(0x09, NTADR_A(22, 23));
+
+    temp = rng_seed & 0b1111;
+    if (temp <= 9) {
+      one_vram_buffer(temp + 0x10, NTADR_A(21, 23));
+    } else {
+      one_vram_buffer(temp - 10 + 0x21, NTADR_A(21, 23));
+    }
+
+    temp = (rng_seed >> 4) & 0b1111;
+    if (temp <= 9) {
+      one_vram_buffer(temp + 0x10, NTADR_A(20, 23));
+    } else {
+      one_vram_buffer(temp - 10 + 0x21, NTADR_A(20, 23));
+    }
+
+    temp = (rng_seed >> 8) & 0b1111;
+    if (temp <= 9) {
+      one_vram_buffer(temp + 0x10, NTADR_A(19, 23));
+    } else {
+      one_vram_buffer(temp - 10 + 0x21, NTADR_A(19, 23));
+    }
+
+    temp = (rng_seed >> 12) & 0b1111;
+    if (temp <= 9) {
+      one_vram_buffer(temp + 0x10, NTADR_A(18, 23));
+    } else {
+      one_vram_buffer(temp - 10 + 0x21, NTADR_A(18, 23));
+    }
+
+    flush_vram_update2();
+  }
+
   // i will index select item
   i = 0;
 

@@ -12,6 +12,7 @@ extern gamestate_t gamestate;
 extern unsigned int rng_seed;
 extern unsigned char fixed_seed;
 #pragma zpsym("gamestate")
+#pragma zpsym("rng_seed")
 #pragma zpsym("fixed_seed")
 
 void gamestate_init();
