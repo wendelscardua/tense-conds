@@ -120,7 +120,7 @@ void update_condition_pool() {
 
 condition_t random_condition() {
   temp = subrand8(cond_pool_weight);
-  for(i_cond = 0; i_cond < num_conditions_in_pool; i_cond) {
+  for(i_cond = 0; i_cond < num_conditions_in_pool; i_cond++) {
     temp_cond = condition_pool[i_cond];
     if (temp < weights[temp_cond]) return temp_cond;
     temp -= weights[temp_cond];
