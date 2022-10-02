@@ -1,6 +1,7 @@
 #include "lib/neslib.h"
 #include "lib/nesdoug.h"
 #include "lib/donut.h"
+#include "chr-data.h"
 #include "gamestate.h"
 #include "title-state.h"
 #include "metasprites.h"
@@ -11,10 +12,18 @@
 #include "music/soundtrack.h"
 
 void title_state_init() {
+  oam_size(0);
+
   pal_bg(gameplay_bg_palette);
   pal_spr(gameplay_spr_palette);
 
-  // TODO: load title chr
+  vram_adr(PPU_PATTERN_TABLE_0);
+  donut_stream_ptr = &gameplay_bg_chr;
+  donut_decompress_to_ppu(PPU_PATTERN_TABLE_SIZE / 64);
+
+  vram_adr(PPU_PATTERN_TABLE_1);
+  donut_stream_ptr = &gameplay_spr_chr;
+  donut_decompress_to_ppu(PPU_PATTERN_TABLE_SIZE / 64);
 
   vram_adr(NTADR_A(0,0));
   donut_stream_ptr = &title_screen;
