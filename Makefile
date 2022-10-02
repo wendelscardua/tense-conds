@@ -40,6 +40,7 @@ ${TARGET}: nes.cfg \
            src/metatiles.o \
            src/conditions.o \
            src/enemies.o \
+           src/enemies-optimizations.o \
            src/levels.o
 	ld65 -C $^ nes.lib -m map.txt -o ${TARGET} ${LD65_FLAGS}
 
@@ -138,6 +139,7 @@ src/conditions.s: src/conditions.c \
 
 src/enemies.s: src/enemies.c \
                src/enemies.h \
+               src/enemies-optimizations.h \
                src/lib/neslib.h \
                src/lib/nesdoug.h \
                src/globals.h \

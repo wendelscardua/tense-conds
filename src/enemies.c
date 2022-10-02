@@ -6,8 +6,9 @@
 #include "map.h"
 #include "subrand.h"
 #include "metasprites.h"
+#include "enemies-optimizations.h"
 
-#pragma bss-name(push, "BSS")
+#pragma bss-name(push, "ZEROPAGE")
 unsigned char i_enemy, shuffled_enemy;
 unsigned int temp_enemy_x, temp_enemy_y;
 #pragma bss-name(pop)
@@ -36,6 +37,7 @@ void add_enemy(enemy_t enemy) {
 
   if (i_enemy >= MAX_ENEMIES) return; // TODO: maybe overwrite another enemy?
 
+  enemy_type[i_enemy] = enemy;
   enemy_x[i_enemy] = (temp_x * 16) << 8;
   enemy_y[i_enemy] = (temp_y * 16) << 8;
   enemy_direction[i_enemy] = subrand8(4);
@@ -60,62 +62,7 @@ void update_enemies() {
 
     switch(enemy_type[i_enemy]) {
     case ZombieEnemy:
-      temp_enemy_x = enemy_x[i_enemy];
-      temp_enemy_y = enemy_y[i_enemy];
-
-      temp_x = (temp_enemy_x + 0x07ff) >> 8 >> 4;
-      temp_y = (temp_enemy_y + 0x07ff) >> 8 >> 4;
-
-      if (map_collision()) {
-        // delete enemies clipping with new conds and stuff
-        enemy_hp[i_enemy] = 0;
-        continue;
-      }
-
-      if (map_fork() && near_snap() && rand8() < 16) {
-        enemy_direction[i_enemy] = subrand8(4);
-        temp_enemy_x = enemy_x[i_enemy] = temp_x << 4 << 8;
-        temp_enemy_y = enemy_y[i_enemy] = temp_y << 4 << 8;
-      }
-
-      switch(enemy_direction[i_enemy]) {
-      case DirectionUp:
-        temp_y = (temp_enemy_y - 0x100) >> 8 >> 4;
-        if (map_collision()) {
-          enemy_y[i_enemy] = enemy_y[i_enemy] & 0xf000;
-          enemy_direction[i_enemy] = subrand8(4);
-        } else {
-          enemy_y[i_enemy] -= enemy_speed[i_enemy];
-        }
-        break;
-      case DirectionDown:
-        temp_y = (temp_enemy_y + 0x1000) >> 8 >> 4;
-        if (map_collision()) {
-          enemy_y[i_enemy] = (enemy_y[i_enemy] + 0x00ff) & 0xf000;
-          enemy_direction[i_enemy] = subrand8(4);
-        } else {
-          enemy_y[i_enemy] += enemy_speed[i_enemy];
-        }
-        break;
-      case DirectionLeft:
-        temp_x = (temp_enemy_x - 0x100) >> 8 >> 4;
-        if (map_collision()) {
-          enemy_x[i_enemy] = enemy_x[i_enemy] & 0xf000;
-          enemy_direction[i_enemy] = subrand8(4);
-        } else {
-          enemy_x[i_enemy] -= enemy_speed[i_enemy];
-        }
-        break;
-      case DirectionRight:
-        temp_x = (temp_enemy_x + 0x1000) >> 8 >> 4;
-        if (map_collision()) {
-          enemy_x[i_enemy] = (enemy_x[i_enemy] + 0x00ff) & 0xf000;
-          enemy_direction[i_enemy] = subrand8(4);
-        } else {
-          enemy_x[i_enemy] += enemy_speed[i_enemy];
-        }
-        break;
-      }
+      zombie_enemy_update();
       break;
     case BatEnemy:
       // TODO: fly around
