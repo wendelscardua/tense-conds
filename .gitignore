@@ -13,6 +13,7 @@ src/level-state.s
 src/levels.s
 src/main.s
 src/map.s
+src/player.s
 src/title-state.s
 src/music/soundtrack.asm
 src/music/soundtrack_dpcm.asm

@@ -39,6 +39,7 @@ ${TARGET}: nes.cfg \
            src/metasprites.o \
            src/metatiles.o \
            src/conditions.o \
+           src/player.o \
            src/enemies.o \
            src/enemies-optimizations.o \
            src/levels.o
@@ -153,6 +154,10 @@ src/map.s: src/map.c \
            src/globals.h \
            src/map.h \
            src/metatiles.h
+	cc65 -Oirs $< --add-source ${CA65_FLAGS}
+
+src/player.s: src/player.c \
+              src/player.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/nametables.o: src/nametables.s \
