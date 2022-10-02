@@ -8,7 +8,8 @@ typedef enum
    NullMetatile,
    FloorMetatile,
    WallMetatile,
-   ConditionerMetatile = 16,
+   ConditionerMetatile,
+   ForkedFloorMetatile,
   } metatile_t;
 
 #endif
