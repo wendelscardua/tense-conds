@@ -152,7 +152,7 @@ no_wall:
 
   ; roll a dice
   jsr _rand8
-  cmp #$10
+  cmp #$20
   bcs no_fork
 
   and #$03
