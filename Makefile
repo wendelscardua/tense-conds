@@ -115,14 +115,12 @@ src/level-state.s: src/level-state.c \
             src/ggsound/ggsound-api.h \
             src/music/soundtrack.h \
             src/subrand.h \
-            src/metasprites.h \
             src/metatiles.h \
             src/chr-data.h \
             src/palettes.h \
             src/nametables.h \
             src/attributes.h \
             src/conditions.h \
-            src/directions.h \
             src/enemies.h \
             src/levels.h \
             src/map.h \
@@ -157,7 +155,13 @@ src/map.s: src/map.c \
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/player.s: src/player.c \
-              src/player.h
+              src/player.h \
+              src/lib/nesdoug.h \
+              src/lib/neslib.h \
+              src/directions.h \
+              src/globals.h \
+              src/map.h \
+              src/metasprites.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/nametables.o: src/nametables.s \

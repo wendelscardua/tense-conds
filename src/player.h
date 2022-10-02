@@ -21,4 +21,7 @@ extern action_t player_action;
 #pragma zpsym("player_direction")
 #pragma zpsym("player_action")
 
+void player_update();
+void render_player();
+
 #endif
