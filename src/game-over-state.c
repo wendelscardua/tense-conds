@@ -67,6 +67,8 @@ void game_over_state_init() {
   ppu_on_all();
 
   ggsound_play_song(song_no_music);
+
+  i = 0; // current selection
 }
 
 void game_over_state_deinit() {
@@ -75,5 +77,35 @@ void game_over_state_deinit() {
 }
 
 void game_over_state_update() {
+  pad_poll(0);
+  pad = pad_state(0);
+  pad_new = get_pad_new(0);
+
+  if (pad_new & (PAD_UP | PAD_LEFT | PAD_DOWN | PAD_RIGHT | PAD_B | PAD_SELECT)) {
+    i = 1 - i;
+  }
+
+  if (pad_new & (PAD_A | PAD_START)) {
+    switch(i) {
+    case 0:
+      set_rand(rng_seed);
+      gamestate_transition(LevelState);
+      break;
+    case 1:
+      gamestate_transition(TitleState);
+      break;
+    }
+    return;
+  }
+
   oam_clear();
+
+  switch(i) {
+  case 0:
+    oam_spr(0x40, 0x97, 0x0e, 0x02);
+    break;
+  case 1:
+    oam_spr(0x40, 0xa7, 0x0e, 0x02);
+    break;
+  }
 }
