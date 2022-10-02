@@ -35,6 +35,7 @@ ${TARGET}: nes.cfg \
            src/chr-data.o \
            src/palettes.o \
            src/nametables.o \
+           src/map.o \
            src/metasprites.o \
            src/metatiles.o \
            src/conditions.o \
@@ -122,6 +123,7 @@ src/level-state.s: src/level-state.c \
             src/directions.h \
             src/enemies.h \
             src/levels.h \
+            src/map.h \
             src/globals.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
@@ -135,12 +137,20 @@ src/conditions.s: src/conditions.c \
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/enemies.s: src/enemies.c \
-                  src/enemies.h \
-                  src/lib/neslib.h \
-                  src/lib/nesdoug.h \
-                  src/globals.h \
-                  src/metasprites.h \
-                  src/subrand.h
+               src/enemies.h \
+               src/lib/neslib.h \
+               src/lib/nesdoug.h \
+               src/globals.h \
+               src/map.h \
+               src/metasprites.h \
+               src/subrand.h
+	cc65 -Oirs $< --add-source ${CA65_FLAGS}
+
+src/map.s: src/map.c \
+           src/map.h \
+           src/globals.h \
+           src/map.h \
+           src/metatiles.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/nametables.o: src/nametables.s \

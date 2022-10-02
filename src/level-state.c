@@ -1,23 +1,24 @@
-#include "lib/neslib.h"
-#include "lib/nesdoug.h"
 #include "lib/donut.h"
+#include "lib/nesdoug.h"
+#include "lib/neslib.h"
 #include "lib/unrle.h"
-#include "palettes.h"
-#include "chr-data.h"
-#include "nametables.h"
-#include "metasprites.h"
-#include "metatiles.h"
-#include "globals.h"
 #include "attributes.h"
-#include "subrand.h"
-#include "gamestate.h"
-#include "level-state.h"
-#include "ggsound/ggsound-api.h"
-#include "music/soundtrack.h"
-#include "levels.h"
+#include "chr-data.h"
 #include "conditions.h"
 #include "directions.h"
 #include "enemies.h"
+#include "gamestate.h"
+#include "ggsound/ggsound-api.h"
+#include "globals.h"
+#include "level-state.h"
+#include "levels.h"
+#include "map.h"
+#include "metasprites.h"
+#include "metatiles.h"
+#include "music/soundtrack.h"
+#include "nametables.h"
+#include "palettes.h"
+#include "subrand.h"
 
 typedef enum
   {
@@ -37,17 +38,6 @@ direction_t player_direction;
 action_t player_action;
 char * level_data;
 #pragma bss-name(pop)
-
-#pragma bss-name(push, "BSS")
-
-char map[13 * 16];
-
-#pragma bss-name(pop)
-
-// input is temp_x column, temp_y row
-unsigned char map_collision() {
-  return map[temp_y * 16 + temp_x] == WallMetatile;
-}
 
 void level_state_init() {
   oam_size(0);

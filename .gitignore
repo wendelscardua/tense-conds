@@ -6,11 +6,13 @@
 map.txt
 src/attributes.s
 src/conditions.s
+src/enemies.s
 src/gamestate.s
 src/globals.s
 src/level-state.s
 src/levels.s
 src/main.s
+src/map.s
 src/title-state.s
 src/music/soundtrack.asm
 src/music/soundtrack_dpcm.asm

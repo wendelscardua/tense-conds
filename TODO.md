@@ -1,7 +1,8 @@
-- Spawn zombies
+- Move zombies
 - Damage
 - Game over
 - Spawn bats
+- Move bats
 - Accelerate zombies and bats
 - Temporarily disable conds
 - Sword
