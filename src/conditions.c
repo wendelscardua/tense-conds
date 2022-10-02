@@ -132,14 +132,17 @@ void conditions_update() {
       temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
 
       temp = ++condition_seconds[i];
-      if (temp == 1) {
+      if (temp == 0) {
+        // comming back from disabled state
+        set_attribute(0x01);
+      } else if (temp == 1) {
         one_vram_buffer(0xf1, temp_int++);
         one_vram_buffer(0xe0, temp_int);
       } else if (temp < 6) {
         one_vram_buffer(0xf0 + temp, temp_int);
       } else if (temp < 10) {
         one_vram_buffer(0xe0 - 5 + temp, temp_int + 1);
-      } else {
+      } else if (temp == 10) {
         one_vram_buffer(0xe5, temp_int + 1);
         condition_seconds[i] = 0;
         switch(condition_type[i]) {
@@ -173,4 +176,20 @@ void conditions_update() {
       }
     }
   }
+}
+
+// located at temp_y row, temp_x column
+void disable_condition() {
+  temp = temp_y * 16 + temp_x;
+  i_cond = cond_map[temp];
+  if (i_cond == 0xff) return;
+
+  if (condition_seconds[i_cond] > 10) return;
+
+  condition_seconds[i_cond] = 0xf5 - subrand8(20);
+
+  temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
+  one_vram_buffer(0xf0, temp_int++);
+  one_vram_buffer(0xe0, temp_int);
+  set_attribute(0x02);
 }

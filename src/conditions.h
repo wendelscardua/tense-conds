@@ -27,5 +27,6 @@ void add_condition();
 void update_condition_pool();
 condition_t random_condition();
 void conditions_update();
+void disable_condition();
 
 #endif

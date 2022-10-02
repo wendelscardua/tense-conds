@@ -177,6 +177,7 @@ src/player.s: src/player.c \
               src/player.h \
               src/lib/nesdoug.h \
               src/lib/neslib.h \
+              src/conditions.h \
               src/directions.h \
               src/gamestate.h \
               src/globals.h \

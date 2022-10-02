@@ -1,5 +1,6 @@
 #include "lib/neslib.h"
 #include "lib/nesdoug.h"
+#include "conditions.h"
 #include "directions.h"
 #include "gamestate.h"
 #include "globals.h"
@@ -99,6 +100,25 @@ void player_update() {
         player_column = temp_x;
         player_action = ActionMoving;
       }
+    }
+    if (pad_new & PAD_A) {
+      temp_x = player_column;
+      temp_y = player_row;
+      switch(player_direction) {
+      case DirectionUp:
+        temp_y--;
+        break;
+      case DirectionDown:
+        temp_y++;
+        break;
+      case DirectionLeft:
+        temp_x--;
+        break;
+      case DirectionRight:
+        temp_x++;
+        break;
+      }
+      disable_condition();
     }
 
     break;
