@@ -16,12 +16,6 @@
   ForkedFloor
 .endenum
 
-.enum Conditions
-  Conditioner
-  ZombieSpawner
-  Total
-.endenum
-
 .segment "CODE"
 
 .proc _enemy_player_collision
@@ -126,7 +120,7 @@ no_collision:
   ; map[temp_x, temp_y]
 
   lda _cond_map, y
-  cmp #Conditions::Total
+  cmp #$ff
 
   beq no_cond
 
@@ -217,7 +211,7 @@ no_fork:
   beq collided
 
   lda _cond_map, y
-  cmp #Conditions::Total
+  cmp #$ff
   bne collided
 
   jmp move
@@ -275,7 +269,7 @@ move:
   beq collided
 
   lda _cond_map, y
-  cmp #Conditions::Total
+  cmp #$ff
   bne collided
 
   jmp move
@@ -337,7 +331,7 @@ move:
   beq collided
 
   lda _cond_map, y
-  cmp #Conditions::Total
+  cmp #$ff
   bne collided
 
   jmp move
@@ -397,7 +391,7 @@ move:
   beq collided
 
   lda _cond_map, y
-  cmp #Conditions::Total
+  cmp #$ff
   bne collided
 
   jmp move

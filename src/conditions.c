@@ -87,6 +87,9 @@ void add_condition() {
   condition_seconds[i_cond] = 0;
   condition_hp[i_cond] = starting_health[temp_cond];
   condition_frames[i_cond] = subrand8(16);
+
+  cond_map[temp_y * 16 + temp_x] = i_cond;
+
   update_condition_pool();
   temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
   multi_vram_buffer_horz(empty_timer, 2, temp_int);
@@ -148,7 +151,6 @@ void conditions_update() {
             temp_y = subrand8(12);
           } while(map_collision());
           temp_cond = random_condition();
-          cond_map[temp_y * 16 + temp_x] = temp_cond; // conditions act as walls
           add_condition();
           break;
         case CondZombieSpawner:
@@ -166,7 +168,7 @@ void conditions_update() {
           temp_x = condition_column[i];
           temp_y = condition_row[i];
           set_attribute(0x00);
-          cond_map[temp_y * 16 + temp_x] = CondTotal;
+          cond_map[temp_y * 16 + temp_x] = 0xff;
         }
       }
     }

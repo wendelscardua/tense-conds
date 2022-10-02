@@ -1,6 +1,5 @@
 #include "globals.h"
 #include "metatiles.h"
-#include "conditions.h"
 
 #pragma bss-name(push, "ZEROPAGE")
 char temp_index;
@@ -9,7 +8,7 @@ char temp_index;
 #pragma bss-name(push, "BSS")
 
 char map[16 * 13];
-condition_t cond_map[16 * 13];
+unsigned char cond_map[16 * 13];
 
 #pragma bss-name(pop)
 
@@ -17,7 +16,7 @@ condition_t cond_map[16 * 13];
 unsigned char map_collision() {
   temp_index = temp_y * 16 + temp_x;
   return map[temp_index] == WallMetatile ||
-    cond_map[temp_index] != CondTotal;
+    cond_map[temp_index] != 0xff;
 }
 
 unsigned char map_fork() {
