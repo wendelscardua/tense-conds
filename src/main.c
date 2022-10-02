@@ -4,6 +4,9 @@
 #include "gamestate.h"
 
 void main (void) {
+
+  fixed_seed = 0;
+
   ppu_off();
 
   bank_bg(0);

@@ -43,26 +43,29 @@ void title_state_deinit() {
   ppu_off();
 }
 
+void mess_with_seed() {
+  if (!fixed_seed) {
+    rng_seed = rand16();
+  }
+}
+
 void title_state_update() {
-  rand8();
+  mess_with_seed();
 
   pad_poll(0);
   pad = pad_state(0);
   pad_new = get_pad_new(0);
 
-  if (pad_new & (PAD_UP | PAD_LEFT)) {
-    rand8();
-    if (i > 0) i--;
-  }
-
-  if (pad_new & (PAD_DOWN | PAD_RIGHT | PAD_SELECT | PAD_B)) {
-    rand8();
-    if (i < 2) i++;
+  if (pad_new & (PAD_UP | PAD_LEFT | PAD_DOWN | PAD_RIGHT | PAD_B | PAD_SELECT)) {
+    mess_with_seed();
+    i = 1 - i;
   }
 
   if (pad_new & (PAD_A | PAD_START)) {
     switch(i) {
     case 0:
+      set_rand(rng_seed);
+      fixed_seed = 0;
       gamestate_transition(LevelState);
       break;
     }
@@ -74,13 +77,10 @@ void title_state_update() {
 
   switch(i) {
   case 0:
-    oam_spr(0x26, 0xa6, 0xe8, 0x02);
+    oam_spr(0x29, 0xb7, 0x0e, 0x02);
     break;
   case 1:
-    oam_spr(0x5e, 0xa6, 0xe8, 0x01);
-    break;
-  case 2:
-    oam_spr(0x8e, 0xa6, 0xe8, 0x03);
+    oam_spr(0x31, 0xbf, 0x0e, 0x02);
     break;
   }
 }

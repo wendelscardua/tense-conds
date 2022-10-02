@@ -9,7 +9,10 @@ typedef enum
   } gamestate_t;
 
 extern gamestate_t gamestate;
+extern unsigned int rng_seed;
+extern unsigned char fixed_seed;
 #pragma zpsym("gamestate")
+#pragma zpsym("fixed_seed")
 
 void gamestate_init();
 void gamestate_deinit();

@@ -6,6 +6,8 @@
 
 #pragma bss-name(push, "ZEROPAGE")
 gamestate_t gamestate;
+unsigned int rng_seed;
+unsigned char fixed_seed;
 #pragma bss-name(pop)
 
 #ifdef DEBUG
