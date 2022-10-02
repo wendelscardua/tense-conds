@@ -5,7 +5,6 @@
 - Sword
 - Music
 - SFX
-- Display seed
 - Input seed
 - Game over menu
 - Game over Score / seed

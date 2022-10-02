@@ -26,6 +26,8 @@ extern direction_t player_direction;
 extern action_t player_action;
 extern unsigned char player_lives;
 extern unsigned char player_iframes;
+extern unsigned int player_score;
+extern unsigned char player_decimal_score[];
 
 #pragma zpsym("player_row")
 #pragma zpsym("player_column")
@@ -35,6 +37,8 @@ extern unsigned char player_iframes;
 #pragma zpsym("player_action")
 #pragma zpsym("player_lives")
 #pragma zpsym("player_iframes")
+#pragma zpsym("player_score")
+#pragma zpsym("player_decimal_score")
 
 void init_player();
 void player_update();

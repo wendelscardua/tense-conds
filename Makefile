@@ -132,10 +132,12 @@ src/game-over-state.s: src/game-over-state.c \
             src/game-over-state.h \
             src/gamestate.h \
             src/lib/neslib.h \
+            src/lib/nesdoug.h \
             src/lib/donut.h \
             src/ggsound/ggsound-api.h \
             src/music/soundtrack.h \
             src/chr-data.h \
+            src/globals.h \
             src/palettes.h \
             src/nametables.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
