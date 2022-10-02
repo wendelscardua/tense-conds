@@ -65,8 +65,12 @@ const unsigned char starting_health[] =
 
 void init_conditions() {
   num_conditions_in_pool = 0;
+  cond_pool_weight = 0;
   for(i = 0; i < MAX_CONDITIONS; i++) {
     condition_hp[i] = 0;
+  }
+  for(i = 0; i < CondTotal; i++) {
+    unlocked[i] = 0;
   }
 }
 
