@@ -123,6 +123,8 @@ void level_state_update() {
 
   player_update();
 
+  if (gamestate == GameOverState) return;
+
   conditions_update();
 
   update_enemies();

@@ -1,16 +1,15 @@
-- Damage
-- Game over
+- Temporarily disable conds
 - Spawn bats
 - Move bats
 - Accelerate zombies and bats
-- Temporarily disable conds
 - Sword
 - Music
 - SFX
 - Title screen
 - Display seed
 - Input seed
-- Score
-- High Score
-- High Score checksum {include bits from the seed, kinda prevents cheating}
+- Scoring
+- Game over menu
+- Game over Score / seed
+- Score checksum {include bits from the seed, kinda prevents cheating}
 - Maybe precompute list of free spaces?

@@ -2,6 +2,7 @@
 #include "gamestate.h"
 #include "title-state.h"
 #include "level-state.h"
+#include "game-over-state.h"
 
 #pragma bss-name(push, "ZEROPAGE")
 gamestate_t gamestate;
@@ -30,6 +31,9 @@ void gamestate_update() {
   case LevelState:
     level_state_update();
     break;
+  case GameOverState:
+    game_over_state_update();
+    break;
   }
 }
 
@@ -49,6 +53,9 @@ void gamestate_init() {
   case LevelState:
     level_state_init();
     break;
+  case GameOverState:
+    game_over_state_init();
+    break;
   }
 #ifdef DEBUG
   frame = old_frame = get_frame_count();
@@ -64,6 +71,9 @@ void gamestate_deinit() {
     break;
   case LevelState:
     level_state_deinit();
+    break;
+  case GameOverState:
+    game_over_state_deinit();
     break;
   }
 }

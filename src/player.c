@@ -1,6 +1,7 @@
 #include "lib/neslib.h"
 #include "lib/nesdoug.h"
 #include "directions.h"
+#include "gamestate.h"
 #include "globals.h"
 #include "player.h"
 #include "map.h"
@@ -29,6 +30,13 @@ void init_player() {
 
 void player_update() {
   if (player_iframes > 0) player_iframes--;
+
+  if (player_lives == 0) {
+    if (player_iframes == 0) {
+      gamestate_transition(GameOverState);
+    }
+    return;
+  }
 
   switch(player_action) {
   case ActionIdle:

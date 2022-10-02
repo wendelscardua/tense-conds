@@ -31,6 +31,7 @@ ${TARGET}: nes.cfg \
            src/gamestate.o \
            src/title-state.o \
            src/level-state.o \
+           src/game-over-state.o \
            src/music/soundtrack.o \
            src/chr-data.o \
            src/palettes.o \
@@ -127,6 +128,18 @@ src/level-state.s: src/level-state.c \
             src/globals.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
+src/game-over-state.s: src/game-over-state.c \
+            src/game-over-state.h \
+            src/gamestate.h \
+            src/lib/neslib.h \
+            src/lib/donut.h \
+            src/ggsound/ggsound-api.h \
+            src/music/soundtrack.h \
+            src/chr-data.h \
+            src/palettes.h \
+            src/nametables.h
+	cc65 -Oirs $< --add-source ${CA65_FLAGS}
+
 src/conditions.s: src/conditions.c \
                   src/conditions.h \
                   src/lib/nesdoug.h \
@@ -163,6 +176,7 @@ src/player.s: src/player.c \
               src/lib/nesdoug.h \
               src/lib/neslib.h \
               src/directions.h \
+              src/gamestate.h \
               src/globals.h \
               src/map.h \
               src/metasprites.h
@@ -170,7 +184,8 @@ src/player.s: src/player.c \
 
 src/nametables.o: src/nametables.s \
                   assets/level-screen.nam.donut \
-                  assets/title-screen.nam.donut
+                  assets/title-screen.nam.donut \
+                  assets/game-over-screen.nam.donut
 	ca65 $< ${CA65_FLAGS}
 
 src/palettes.o: src/palettes.s src/palettes.h $(wildcard assets/*.pal)

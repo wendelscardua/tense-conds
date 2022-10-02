@@ -4,10 +4,12 @@
 typedef enum
   {
    TitleState,
-   LevelState
+   LevelState,
+   GameOverState,
   } gamestate_t;
 
 extern gamestate_t gamestate;
+#pragma zpsym("gamestate")
 
 void gamestate_init();
 void gamestate_deinit();

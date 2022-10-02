@@ -8,6 +8,7 @@ src/attributes.s
 src/conditions.s
 src/enemies.s
 src/gamestate.s
+src/game-over-state.s
 src/globals.s
 src/level-state.s
 src/levels.s
