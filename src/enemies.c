@@ -57,26 +57,27 @@ void update_enemies() {
     if (enemy_hp[i_enemy] == 0) continue;
 
     // move enemy
-    temp_enemy_x = enemy_x[i_enemy];
-    temp_enemy_y = enemy_y[i_enemy];
-
-    temp_x = (temp_enemy_x + 0x07ff) >> 8 >> 4;
-    temp_y = (temp_enemy_y + 0x07ff) >> 8 >> 4;
-
-    if (map_collision()) {
-      // delete enemies clipping with new conds and stuff
-      enemy_hp[i_enemy] = 0;
-      continue;
-    }
-
-    if (map_fork() && near_snap() && rand8() < 16) {
-      enemy_direction[i_enemy] = subrand8(4);
-      temp_enemy_x = enemy_x[i_enemy] = temp_x << 4 << 8;
-      temp_enemy_y = enemy_y[i_enemy] = temp_y << 4 << 8;
-    }
 
     switch(enemy_type[i_enemy]) {
     case ZombieEnemy:
+      temp_enemy_x = enemy_x[i_enemy];
+      temp_enemy_y = enemy_y[i_enemy];
+
+      temp_x = (temp_enemy_x + 0x07ff) >> 8 >> 4;
+      temp_y = (temp_enemy_y + 0x07ff) >> 8 >> 4;
+
+      if (map_collision()) {
+        // delete enemies clipping with new conds and stuff
+        enemy_hp[i_enemy] = 0;
+        continue;
+      }
+
+      if (map_fork() && near_snap() && rand8() < 16) {
+        enemy_direction[i_enemy] = subrand8(4);
+        temp_enemy_x = enemy_x[i_enemy] = temp_x << 4 << 8;
+        temp_enemy_y = enemy_y[i_enemy] = temp_y << 4 << 8;
+      }
+
       switch(enemy_direction[i_enemy]) {
       case DirectionUp:
         temp_y = (temp_enemy_y - 0x100) >> 8 >> 4;
