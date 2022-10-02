@@ -34,33 +34,39 @@ const char empty_timer[] = { 0xf0, 0xe0 };
 // tiles for each condition
 const char condition_icon[][] =
   {
-   // CondConditioner
+   // Conditioner
    { 0xd0, 0xd1 },
-   // CondZombieSpawner
-   { 0xd2, 0xd3 }
+   // Zombie spawner
+   { 0xd2, 0xd3 },
+   // Bat spawner
+   { 0xda, 0xdb },
   };
 
 // which conds are unlocked when adding the current cond
   const condition_t unlockables[][] =
   {
-   // CondConditioner
-   { CondZombieSpawner, CondTotal },
-   // CondZombieSpawner
-   { CondTotal }
+   // Conditioner
+   { CondZombieSpawner, CondBatSpawner, CondTotal },
+   // Zombie spawner
+   { CondTotal },
+   // Bat spawner
+   { CondTotal },
   };
 
 // weighted probabilities for each type of cond
 const char weights[] =
   {
-   0, // CondConditioner
-   10, // CondZombieSpawner
+   0x00, // Conditioner
+   0x10, // Zombie spawner
+   0x08, // Bat spawner
   };
 
 // starting health for each cond
 const unsigned char starting_health[] =
   {
-   0xff, // CondConditioner
-   0x03, // CondZombieSpawner
+   0xff, // Conditioner
+   0x03, // Zombie spawner
+   0x03, // Bat spawner
   };
 
 void init_conditions() {
@@ -157,11 +163,10 @@ void conditions_update() {
           add_condition();
           break;
         case CondZombieSpawner:
-          do {
-            temp_x = subrand8(16);
-            temp_y = subrand8(12);
-          } while(map_collision());
           add_enemy(ZombieEnemy);
+          break;
+        case CondBatSpawner:
+          add_enemy(BatEnemy);
           break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {

@@ -7,6 +7,7 @@ typedef enum
   {
    CondConditioner,
    CondZombieSpawner,
+   CondBatSpawner,
    CondTotal
   } condition_t;
 

@@ -1,5 +1,3 @@
-- Temporarily disable conds
-- Spawn bats
 - Move bats
 - Accelerate zombies and bats
 - Sword

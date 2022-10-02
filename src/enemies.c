@@ -38,6 +38,11 @@ void add_enemy(enemy_t enemy) {
 
   if (i_enemy >= MAX_ENEMIES) return; // TODO: maybe overwrite another enemy?
 
+  do {
+    temp_x = subrand8(16);
+    temp_y = subrand8(12);
+  } while(map_collision());
+
   enemy_type[i_enemy] = enemy;
   enemy_x[i_enemy] = (temp_x * 16) << 8;
   enemy_y[i_enemy] = (temp_y * 16) << 8;
@@ -63,12 +68,7 @@ void update_enemies() {
     case ZombieEnemy:
       zombie_enemy_update();
       break;
-    case BatEnemy:
-      // TODO: fly around
-      break;
     }
-
-
   }
 }
 
