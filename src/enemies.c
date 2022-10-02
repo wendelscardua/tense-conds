@@ -22,6 +22,7 @@ direction_t enemy_direction[MAX_ENEMIES];
 unsigned int enemy_speed[MAX_ENEMIES];
 enemy_t enemy_type[MAX_ENEMIES];
 unsigned char enemy_hp[MAX_ENEMIES];
+unsigned char enemy_aux[MAX_ENEMIES];
 
 #pragma bss-name(pop)
 
@@ -38,17 +39,51 @@ void add_enemy(enemy_t enemy) {
 
   if (i_enemy >= MAX_ENEMIES) return; // TODO: maybe overwrite another enemy?
 
-  do {
-    temp_x = subrand8(16);
-    temp_y = subrand8(12);
-  } while(map_collision());
-
   enemy_type[i_enemy] = enemy;
-  enemy_x[i_enemy] = (temp_x * 16) << 8;
-  enemy_y[i_enemy] = (temp_y * 16) << 8;
-  enemy_direction[i_enemy] = subrand8(4);
-  enemy_hp[i_enemy] = 1;
-  enemy_speed[i_enemy] = 0x0060;
+
+  switch(enemy) {
+  case ZombieEnemy:
+    do {
+      temp_x = subrand8(16);
+      temp_y = subrand8(12);
+    } while(map_collision());
+
+    enemy_x[i_enemy] = (temp_x * 16) << 8;
+    enemy_y[i_enemy] = (temp_y * 16) << 8;
+    enemy_direction[i_enemy] = subrand8(4);
+    enemy_hp[i_enemy] = 1;
+    enemy_speed[i_enemy] = 0x0060;
+    break;
+  case BatEnemy:
+    if (rand8() < 128) {
+      enemy_direction[i_enemy] = DirectionRight;
+      enemy_x[i_enemy] = 0x0000;
+    } else {
+      enemy_direction[i_enemy] = DirectionLeft;
+      enemy_x[i_enemy] = 0xf000;
+    }
+    enemy_y[i_enemy] = (0x20 + subrand8(0x90 - 0x20)) << 8;
+    enemy_hp[i_enemy] = 1;
+    enemy_speed[i_enemy] = 0x0080;
+    enemy_aux[i_enemy] = 0x00;
+    break;
+  }
+}
+
+void bat_enemy_update() {
+  if (enemy_direction[i_enemy] == DirectionLeft) {
+    //if (enemy_x[i_enemy] < enemy_speed[i_enemy]) {
+    //  enemy_hp[i_enemy] = 0;
+    //  return;
+    //}
+    enemy_x[i_enemy] -= enemy_speed[i_enemy];
+  } else {
+    //if (enemy_x[i_enemy] >= 0xf000 - enemy_speed[i_enemy]) {
+    //  enemy_hp[i_enemy] = 0;
+    //  return;
+    //}
+    enemy_x[i_enemy] += enemy_speed[i_enemy];
+  }
 }
 
 // TODO report collisions
@@ -67,6 +102,9 @@ void update_enemies() {
     switch(enemy_type[i_enemy]) {
     case ZombieEnemy:
       zombie_enemy_update();
+      break;
+    case BatEnemy:
+      bat_enemy_update();
       break;
     }
   }
@@ -92,6 +130,12 @@ void render_enemies() {
       oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
       break;
     case BatEnemy:
+      temp = FLYER_FLY;
+      if (enemy_direction[shuffled_enemy] == DirectionRight) temp += 2;
+      if ((temp_x ^ temp_y) & 0b100) {
+        temp++;
+      }
+      oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
       break;
     default:
       break;
