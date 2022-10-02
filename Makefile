@@ -147,6 +147,7 @@ src/enemies.s: src/enemies.c \
                src/globals.h \
                src/map.h \
                src/metasprites.h \
+               src/player.h \
                src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 

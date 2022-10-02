@@ -4,6 +4,7 @@
 #include "enemies.h"
 #include "globals.h"
 #include "map.h"
+#include "player.h"
 #include "subrand.h"
 #include "metasprites.h"
 #include "enemies-optimizations.h"
@@ -45,21 +46,14 @@ void add_enemy(enemy_t enemy) {
   enemy_speed[i_enemy] = 0x0060;
 }
 
-unsigned char near_snap() {
-  temp = (temp_enemy_x >> 8) & 0x0f;
-  if (temp > 0x02 && temp < 0x0e) return 0;
-  temp = (temp_enemy_y >> 8) & 0x0f;
-  if (temp > 0x02 && temp < 0x0e) return 0;
-  return 1;
-}
-
 // TODO report collisions
 void update_enemies() {
   for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
     if (enemy_hp[i_enemy] == 0) continue;
 
-    if (enemy_player_collision()) {
+    if (player_iframes == 0 && enemy_player_collision()) {
       enemy_hp[i_enemy] = 0;
+      damage_player();
       continue;
     }
 

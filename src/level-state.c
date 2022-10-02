@@ -61,12 +61,9 @@ void level_state_init() {
   for (i = 0; i < temp; i++) {
     switch(*level_data++) {
     case PlayerEntity:
-      player_column = *level_data++;
-      player_row = *level_data++;
-      player_x = (player_column * 16);
-      player_y = (player_row * 16);
-      player_direction = DirectionDown;
-      player_action = ActionIdle;
+      temp_x = *level_data++;
+      temp_y = *level_data++;
+      init_player();
       break;
     default:
       j = *level_data++;
@@ -88,6 +85,11 @@ void level_state_init() {
     }
   }
 
+  for(i = 0; i < player_lives; i++) {
+    one_vram_buffer(HEART_TILE, NTADR_A(LIVES_X + i, LIVES_Y));
+  }
+  flush_vram_update2();
+
   init_conditions();
   init_enemies();
 
@@ -106,7 +108,7 @@ void level_state_init() {
   }
 
   // TODO: fade in?
-  ppu_on_all();
+        ppu_on_all();
 
   ggsound_play_song(song_no_music);
 }

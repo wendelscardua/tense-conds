@@ -11,9 +11,25 @@ unsigned char player_row, player_column;
 unsigned char player_x, player_y;
 direction_t player_direction;
 action_t player_action;
+unsigned char player_lives;
+unsigned char player_iframes;
 #pragma bss-name(pop)
 
+// temp_y is player row and temp_x is player column
+void init_player() {
+  player_column = temp_x;
+  player_row = temp_y;
+  player_x = (player_column * 16);
+  player_y = (player_row * 16);
+  player_direction = DirectionDown;
+  player_action = ActionIdle;
+  player_lives = PLAYER_STARTING_LIVES;
+  player_iframes = 0;
+}
+
 void player_update() {
+  if (player_iframes > 0) player_iframes--;
+
   switch(player_action) {
   case ActionIdle:
     pad_poll(0);
@@ -73,6 +89,8 @@ void player_update() {
 }
 
 void render_player() {
+  if (player_iframes > 0 && (get_frame_count() & 0b110) == 0) return;
+
   temp_x = player_x;
   temp_y = player_y - 1;
   switch(player_action) {
@@ -87,4 +105,10 @@ void render_player() {
     oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
     break;
   }
+}
+
+void damage_player() {
+  player_iframes = PLAYER_IFRAMES;
+  player_lives--;
+  one_vram_buffer(HEARTLESS_TILE, NTADR_A(LIVES_X + player_lives, LIVES_Y));
 }
