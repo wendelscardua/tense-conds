@@ -132,7 +132,10 @@ src/conditions.s: src/conditions.c \
                   src/lib/nesdoug.h \
                   src/lib/neslib.h \
                   src/attributes.h \
+                  src/enemies.h \
                   src/globals.h \
+                  src/map.h \
+                  src/metatiles.h \
                   src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 

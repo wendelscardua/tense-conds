@@ -116,66 +116,13 @@ void level_state_deinit() {
   ppu_off();
 }
 
-void conditions_update() {
-  for(i = 0; i < MAX_CONDITIONS; i++) {
-    if (condition_hp[i] == 0) continue;
-    if (condition_frames[i]++ >= 60) {
-      condition_frames[i] = 0;
-      temp_x = condition_column[i];
-      temp_y = condition_row[i];
-      temp_int = NTADR_A(2 * temp_x, 2 * temp_y);
-
-      temp = ++condition_seconds[i];
-      if (temp == 1) {
-        one_vram_buffer(0xf1, temp_int++);
-        one_vram_buffer(0xe0, temp_int);
-      } else if (temp < 6) {
-        one_vram_buffer(0xf0 + temp, temp_int);
-      } else if (temp < 10) {
-        one_vram_buffer(0xe0 - 5 + temp, temp_int + 1);
-      } else {
-        one_vram_buffer(0xe5, temp_int + 1);
-        condition_seconds[i] = 0;
-        switch(condition_type[i]) {
-        case CondConditioner:
-          // TODO: optimize (random map index, then convert to coordinates if needed
-          // TODO: delay spawn with nice animation
-          do {
-            temp_x = subrand8(16);
-            temp_y = subrand8(12);
-          } while(map_collision());
-          temp_cond = random_condition();
-          add_condition();
-          map[temp_y * 16 + temp_x] = WallMetatile; // conditions act as walls
-          break;
-        case CondZombieSpawner:
-          do {
-            temp_x = subrand8(16);
-            temp_y = subrand8(12);
-          } while(map_collision());
-          add_enemy(ZombieEnemy);
-          break;
-        }
-        if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {
-          // TODO: delay shutting down
-          multi_vram_buffer_horz(metatiles + 5, 2, temp_int);
-          multi_vram_buffer_horz(metatiles + 7, 2, temp_int + 0x20);
-          temp_x = condition_column[i];
-          temp_y = condition_row[i];
-          set_attribute(0x00);
-          map[temp_y * 16 + temp_x] = FloorMetatile;
-        }
-      }
-    }
-  }
-}
-
 void level_state_update() {
   oam_clear();
 
   player_update();
 
   conditions_update();
+
   update_enemies();
 
   flush_attributes();

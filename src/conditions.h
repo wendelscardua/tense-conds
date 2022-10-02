@@ -26,5 +26,6 @@ void init_conditions();
 void add_condition();
 void update_condition_pool();
 condition_t random_condition();
+void conditions_update();
 
 #endif
