@@ -14,6 +14,9 @@ direction_t player_direction;
 action_t player_action;
 unsigned char player_lives;
 unsigned char player_iframes;
+unsigned char player_score_tick;
+unsigned int player_score;
+unsigned char player_decimal_score[5];
 #pragma bss-name(pop)
 
 // temp_y is player row and temp_x is player column
@@ -26,6 +29,11 @@ void init_player() {
   player_action = ActionIdle;
   player_lives = PLAYER_STARTING_LIVES;
   player_iframes = 0;
+  player_score = 0;
+  player_score_tick = 60;
+  for(i = 0; i < 5; i++) {
+    player_decimal_score[i] = 0x10;
+  }
 }
 
 void player_update() {
@@ -36,6 +44,23 @@ void player_update() {
       gamestate_transition(GameOverState);
     }
     return;
+  }
+
+  player_score_tick--;
+  if (player_score_tick == 0) {
+    player_score_tick = 60;
+    player_score++;
+    i = 4;
+    while(1) {
+      player_decimal_score[i]++;
+      if (player_decimal_score[i] == 0x1a) {
+        player_decimal_score[i] = 0x10;
+        i--;
+      } else {
+        break;
+      }
+    }
+    multi_vram_buffer_horz(player_decimal_score + i, 5 - i, NTADR_A(SCORE_X + i, SCORE_Y));
   }
 
   switch(player_action) {

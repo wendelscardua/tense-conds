@@ -8,6 +8,10 @@
 #define HEARTLESS_TILE 0x00
 #define LIVES_X 19
 #define LIVES_Y 26
+
+#define SCORE_X 9
+#define SCORE_Y 26
+
 #define PLAYER_IFRAMES 45
 
 typedef enum

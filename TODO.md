@@ -8,7 +8,6 @@
 - Title screen
 - Display seed
 - Input seed
-- Scoring
 - Game over menu
 - Game over Score / seed
 - Score checksum {include bits from the seed, kinda prevents cheating}
