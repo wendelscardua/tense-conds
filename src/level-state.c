@@ -18,6 +18,7 @@
 #include "music/soundtrack.h"
 #include "nametables.h"
 #include "palettes.h"
+#include "player.h"
 #include "subrand.h"
 
 typedef enum
@@ -25,17 +26,7 @@ typedef enum
    PlayerEntity
   } entity_t;
 
-typedef enum
-  {
-   ActionIdle,
-   ActionMoving
-  } action_t;
-
 #pragma bss-name(push, "ZEROPAGE")
-unsigned char player_row, player_column;
-unsigned char player_x, player_y;
-direction_t player_direction;
-action_t player_action;
 char * level_data;
 #pragma bss-name(pop)
 
