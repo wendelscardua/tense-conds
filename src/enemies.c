@@ -40,7 +40,7 @@ void add_enemy(enemy_t enemy) {
   enemy_y[i_enemy] = (temp_y * 16) << 8;
   enemy_direction[i_enemy] = subrand8(4);
   enemy_hp[i_enemy] = 1;
-  enemy_speed[i_enemy] = 0x00b0;
+  enemy_speed[i_enemy] = 0x0060;
 }
 
 unsigned char near_snap() {
