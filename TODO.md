@@ -1,4 +1,3 @@
-- Move zombies
 - Damage
 - Game over
 - Spawn bats

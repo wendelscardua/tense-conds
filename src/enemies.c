@@ -58,6 +58,11 @@ void update_enemies() {
   for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
     if (enemy_hp[i_enemy] == 0) continue;
 
+    if (enemy_player_collision()) {
+      enemy_hp[i_enemy] = 0;
+      continue;
+    }
+
     // move enemy
 
     switch(enemy_type[i_enemy]) {
@@ -68,6 +73,8 @@ void update_enemies() {
       // TODO: fly around
       break;
     }
+
+
   }
 }
 

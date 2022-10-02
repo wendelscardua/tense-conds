@@ -1,6 +1,8 @@
 .export _zombie_enemy_update
+.export _enemy_player_collision
 
 .importzp _i_enemy, _temp_enemy_x, _temp_enemy_y, _temp_x, _temp_y
+.importzp _player_x, _player_y
 .import _enemy_x, _enemy_y, _enemy_hp, _enemy_speed, _enemy_direction
 .import _map
 
@@ -15,6 +17,68 @@
 .endenum
 
 .segment "CODE"
+
+.proc _enemy_player_collision
+  lda _i_enemy
+  asl
+  tax
+
+  ; algorithm:
+  ; if (l1.x > r2.x || l2.x > r1.x)
+  ;      return false;
+  ; if (r1.y > l2.y || r2.y > l1.y)
+  ;     return false;
+  ; return true;
+  ;
+  ; l1 = enemy + 2, l2 = player + 2
+  ; r1 = enemy + 16 - 2, r2 = player + 16 - 2
+
+  ; l1.x > r2.x
+  ; enemy.x + 2 > player.x + 16 - 2
+  ; enemy.x > player.x + 12
+  ; player.x + 12 < enemy.x
+
+  lda _player_x
+  clc
+  adc #12
+  cmp _enemy_x + 1, x
+  bcc no_collision
+
+  ; l2.x > r1.x
+  ; player.x + 2 > enemy.x + 16 - 2
+  ; enemy.x + 14 < player.x + 2
+  ; enemy.x + 12 < player.x
+
+  lda _enemy_x + 1, x
+  clc
+  adc #12
+  cmp _player_x
+  bcc no_collision
+
+  ; idem for y
+
+  lda _player_y
+  clc
+  adc #12
+  cmp _enemy_y + 1, x
+  bcc no_collision
+
+  lda _enemy_y + 1, x
+  clc
+  adc #12
+  cmp _player_y
+  bcc no_collision
+
+  ; collision
+  lda #1
+  ldx #0
+  rts
+
+no_collision:
+  lda #0
+  tax
+  rts
+.endproc
 
 .proc _zombie_enemy_update
   lda _i_enemy
