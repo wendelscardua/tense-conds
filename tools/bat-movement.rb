@@ -22,7 +22,8 @@ File.open(output, 'wb') do |f|
 
   f.puts <<~"ASM"
     .segment "RODATA"
-    sine_deltas:
+    .export _sine_deltas
+    _sine_deltas:
   ASM
 
   deltas.each do |delta|

@@ -43,7 +43,8 @@ ${TARGET}: nes.cfg \
            src/player.o \
            src/enemies.o \
            src/enemies-optimizations.o \
-           src/levels.o
+           src/levels.o \
+           src/sine-deltas.o
 	ld65 -C $^ nes.lib -m map.txt -o ${TARGET} ${LD65_FLAGS}
 
 src/%.o: src/%.s
@@ -210,6 +211,9 @@ src/music/soundtrack.txt: src/music/soundtrack.ftm
 
 src/levels.s: tools/compile-levels.rb assets/tiled $(wildcard assets/tiled/*)
 	ruby tools/compile-levels.rb assets/tiled $@
+
+src/sine-deltas.s: tools/bat-movement.rb
+	ruby tools/bat-movement.rb src/sine-deltas.s
 
 %.donut: % tools/donut
 	tools/donut -f $< -o $@

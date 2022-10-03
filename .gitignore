@@ -15,6 +15,7 @@ src/levels.s
 src/main.s
 src/map.s
 src/player.s
+src/sine-deltas.s
 src/title-state.s
 src/music/soundtrack.asm
 src/music/soundtrack_dpcm.asm
