@@ -48,6 +48,8 @@ const char condition_icon[][] =
    { 0xd8, 0xd9 },
    // Ice
    { 0xd6, 0xd7 },
+   // Teleport
+   { 0xdc, 0xdd },
   };
 
 // which conds are unlocked when adding the current cond
@@ -64,8 +66,10 @@ const condition_t unlockables[CondTotal][CondTotal] =
    // Bat haste
    { CondTotal },
    // Sword
-   { CondTotal },
+   { CondTeleport, CondTotal },
    // Ice
+   { CondTotal },
+   // Teleport
    { CondTotal },
   };
 
@@ -79,7 +83,8 @@ const char weights[] =
    0x08, // Bat haste
    0x10, // Sword
    0x18, // Ice
-  }; // Total: 0x78
+   0x08  // Teleport
+  }; // Total: 0x80
 
 // starting health for each cond
 const unsigned char starting_health[] =
@@ -91,6 +96,7 @@ const unsigned char starting_health[] =
    0x05, // Bat haste
    0x02, // Sword
    0x03, // Ice
+   0x03, // Teleport
   };
 
 void init_conditions() {
@@ -203,6 +209,9 @@ void conditions_update() {
           break;
         case CondIce:
           freeze_player();
+          break;
+        case CondTeleport:
+          teleport_player();
           break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {

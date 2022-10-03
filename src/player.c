@@ -255,3 +255,16 @@ void freeze_player() {
     }
   }
 }
+
+void teleport_player() {
+  player_iframes = PLAYER_IFRAMES;
+  do {
+    temp_x = subrand8(16);
+    temp_y = subrand8(12);
+  } while(map_collision());
+  player_row = temp_y;
+  player_y = temp_y << 4;
+  player_column = temp_x;
+  player_x = temp_x << 4;
+  player_action = ActionIdle;
+}
