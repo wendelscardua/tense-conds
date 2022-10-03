@@ -6,5 +6,4 @@
 - ??? cond
 
 Issues:
-- condition on top left corner is B/W
 - maybe ice collision issues?
