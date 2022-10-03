@@ -6,6 +6,7 @@ typedef enum
    TitleState,
    LevelState,
    GameOverState,
+   SeedInputState,
   } gamestate_t;
 
 extern gamestate_t gamestate;

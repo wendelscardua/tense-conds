@@ -103,6 +103,9 @@ void title_state_update() {
       fixed_seed = 0;
       gamestate_transition(LevelState);
       break;
+    case 1:
+      gamestate_transition(SeedInputState);
+      break;
     }
     return;
   }

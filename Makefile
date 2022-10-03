@@ -32,6 +32,7 @@ ${TARGET}: nes.cfg \
            src/title-state.o \
            src/level-state.o \
            src/game-over-state.o \
+           src/seed-input-state.o \
            src/music/soundtrack.o \
            src/chr-data.o \
            src/palettes.o \
@@ -141,6 +142,19 @@ src/game-over-state.s: src/game-over-state.c \
             src/globals.h \
             src/palettes.h \
             src/nametables.h
+	cc65 -Oirs $< --add-source ${CA65_FLAGS}
+
+src/seed-input-state.s: src/seed-input-state.c \
+            src/seed-input-state.h \
+            src/gamestate.h \
+            src/lib/neslib.h \
+            src/lib/nesdoug.h \
+            src/metasprites.h \
+            src/palettes.h \
+            src/nametables.h \
+            src/globals.h \
+            src/ggsound/ggsound-api.h \
+            src/music/soundtrack.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
 src/conditions.s: src/conditions.c \

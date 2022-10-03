@@ -3,6 +3,7 @@
 #include "title-state.h"
 #include "level-state.h"
 #include "game-over-state.h"
+#include "seed-input-state.h"
 
 #pragma bss-name(push, "ZEROPAGE")
 gamestate_t gamestate;
@@ -36,6 +37,9 @@ void gamestate_update() {
   case GameOverState:
     game_over_state_update();
     break;
+  case SeedInputState:
+    seed_input_state_update();
+    break;
   }
 }
 
@@ -58,6 +62,9 @@ void gamestate_init() {
   case GameOverState:
     game_over_state_init();
     break;
+  case SeedInputState:
+    seed_input_state_init();
+    break;
   }
 #ifdef DEBUG
   frame = old_frame = get_frame_count();
@@ -76,6 +83,9 @@ void gamestate_deinit() {
     break;
   case GameOverState:
     game_over_state_deinit();
+    break;
+  case SeedInputState:
+    seed_input_state_deinit();
     break;
   }
 }
