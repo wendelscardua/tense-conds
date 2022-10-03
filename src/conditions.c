@@ -7,6 +7,8 @@
 #include "player.h"
 #include "map.h"
 #include "metatiles.h"
+#include "ggsound/ggsound-api.h"
+#include "music/soundtrack.h"
 
 #pragma bss-name(push, "ZEROPAGE")
 char num_conditions_in_pool;
@@ -181,6 +183,7 @@ void conditions_update() {
       } else if (temp == 10) {
         one_vram_buffer(0xe5, temp_int + 1);
         condition_seconds[i] = 0;
+        ggsound_play_sfx_1(sfx_on);
         switch(condition_type[i]) {
         case CondConditioner:
           // TODO: optimize (random map index, then convert to coordinates if needed
@@ -242,4 +245,5 @@ void disable_condition() {
   one_vram_buffer(0xf0, temp_int++);
   one_vram_buffer(0xe0, temp_int);
   set_attribute(0x02);
+  ggsound_play_sfx_2(sfx_off);
 }

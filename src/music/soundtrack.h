@@ -8,7 +8,8 @@ typedef enum
 
 typedef enum
   {
-   sfx_one
+   sfx_on,
+   sfx_off
   } sfx_t;
 
 extern const void * song_list;
