@@ -29,7 +29,7 @@ char * level_data;
 #pragma bss-name(pop)
 
 void level_state_init() {
-  oam_size(0);
+  oam_size(1);
 
   vram_adr(PPU_PATTERN_TABLE_0);
   donut_stream_ptr = &gameplay_bg_chr;
