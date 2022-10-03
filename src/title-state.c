@@ -8,6 +8,7 @@
 #include "palettes.h"
 #include "nametables.h"
 #include "globals.h"
+#include "hex-writer.h"
 #include "ggsound/ggsound-api.h"
 #include "music/soundtrack.h"
 
@@ -33,33 +34,7 @@ void title_state_init() {
     one_vram_buffer(0x08, NTADR_A(17, 23));
     one_vram_buffer(0x09, NTADR_A(22, 23));
 
-    temp = rng_seed & 0b1111;
-    if (temp <= 9) {
-      one_vram_buffer(temp + 0x10, NTADR_A(21, 23));
-    } else {
-      one_vram_buffer(temp - 10 + 0x21, NTADR_A(21, 23));
-    }
-
-    temp = (rng_seed >> 4) & 0b1111;
-    if (temp <= 9) {
-      one_vram_buffer(temp + 0x10, NTADR_A(20, 23));
-    } else {
-      one_vram_buffer(temp - 10 + 0x21, NTADR_A(20, 23));
-    }
-
-    temp = (rng_seed >> 8) & 0b1111;
-    if (temp <= 9) {
-      one_vram_buffer(temp + 0x10, NTADR_A(19, 23));
-    } else {
-      one_vram_buffer(temp - 10 + 0x21, NTADR_A(19, 23));
-    }
-
-    temp = (rng_seed >> 12) & 0b1111;
-    if (temp <= 9) {
-      one_vram_buffer(temp + 0x10, NTADR_A(18, 23));
-    } else {
-      one_vram_buffer(temp - 10 + 0x21, NTADR_A(18, 23));
-    }
+    WRITE_INT_AS_HEX(rng_seed, 18, 23, temp);
 
     flush_vram_update2();
   }

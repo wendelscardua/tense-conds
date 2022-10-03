@@ -10,6 +10,7 @@
 #include "player.h"
 #include "ggsound/ggsound-api.h"
 #include "music/soundtrack.h"
+#include "hex-writer.h"
 
 void game_over_state_init() {
   oam_size(0);
@@ -31,33 +32,7 @@ void game_over_state_init() {
 
 
   // display seed
-  temp = rng_seed & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(18, 15));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(18, 15));
-  }
-
-  temp = (rng_seed >> 4) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(17, 15));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(17, 15));
-  }
-
-  temp = (rng_seed >> 8) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(16, 15));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(16, 15));
-  }
-
-  temp = (rng_seed >> 12) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(15, 15));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(15, 15));
-  }
+  WRITE_INT_AS_HEX(rng_seed, 15, 15, temp);
 
   flush_vram_update2();
 
