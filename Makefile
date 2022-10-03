@@ -153,6 +153,7 @@ src/seed-input-state.s: src/seed-input-state.c \
             src/palettes.h \
             src/nametables.h \
             src/globals.h \
+            src/hex-writer.h \
             src/ggsound/ggsound-api.h \
             src/music/soundtrack.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}

@@ -10,35 +10,10 @@
 #include "globals.h"
 #include "ggsound/ggsound-api.h"
 #include "music/soundtrack.h"
+#include "hex-writer.h"
 
 void refresh_seed() {
-  temp = rng_seed & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(9, 14));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(9, 14));
-  }
-
-  temp = (rng_seed >> 4) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(8, 14));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(8, 14));
-  }
-
-  temp = (rng_seed >> 8) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(7, 14));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(7, 14));
-  }
-
-  temp = (rng_seed >> 12) & 0b1111;
-  if (temp <= 9) {
-    one_vram_buffer(temp + 0x10, NTADR_A(6, 14));
-  } else {
-    one_vram_buffer(temp - 10 + 0x21, NTADR_A(6, 14));
-  }
+  WRITE_INT_AS_HEX(rng_seed, 6, 14, temp);
 }
 
 void seed_input_state_init() {
