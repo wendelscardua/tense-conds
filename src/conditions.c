@@ -58,7 +58,7 @@ const condition_t unlockables[CondTotal][CondTotal] =
    // Zombie spawner
    { CondZombieHaste, CondSword, CondIce, CondTotal },
    // Bat spawner
-   { CondBatHaste, CondSword, CondTotal },
+   { CondBatHaste, CondSword, CondIce, CondTotal },
    // Zombie haste
    { CondTotal },
    // Bat haste
