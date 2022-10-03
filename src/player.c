@@ -160,6 +160,9 @@ void render_player() {
     oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
     break;
   }
+  if (sword_durability > 0) {
+    oam_meta_spr(temp_x, temp_y, metasprite_pointers[SWORD + player_direction]);
+  }
 }
 
 void damage_player() {

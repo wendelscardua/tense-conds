@@ -217,16 +217,16 @@ metasprite_swordDown_data:
 metasprite_swordLeft_data:
 
 
-.byte -12,  6,$39,3
-.byte - 4,  6,$3b,3
+.byte -11,  8,$39,3
+.byte - 3,  8,$3b,3
 .byte $80
 
 
 metasprite_swordRight_data:
 
 
-.byte  22,  6,$39,3|OAM_FLIP_H
-.byte  14,  6,$3b,3|OAM_FLIP_H
+.byte  19,  8,$39,3|OAM_FLIP_H
+.byte  11,  8,$3b,3|OAM_FLIP_H
 .byte $80
 
 
