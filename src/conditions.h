@@ -8,6 +8,8 @@ typedef enum
    CondConditioner,
    CondZombieSpawner,
    CondBatSpawner,
+   CondZombieHaste,
+   CondBatHaste,
    CondTotal
   } condition_t;
 

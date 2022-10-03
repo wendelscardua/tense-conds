@@ -1,5 +1,3 @@
-- Move bats
-- Accelerate zombies and bats
 - Sword
 - Music
 - SFX

@@ -40,6 +40,10 @@ const char condition_icon[][] =
    { 0xd2, 0xd3 },
    // Bat spawner
    { 0xda, 0xdb },
+   // Zombie haste
+   { 0xd4, 0xd5 },
+   // Bat haste
+   { 0xde, 0xdf },
   };
 
 // which conds are unlocked when adding the current cond
@@ -48,8 +52,12 @@ const char condition_icon[][] =
    // Conditioner
    { CondZombieSpawner, CondBatSpawner, CondTotal },
    // Zombie spawner
-   { CondTotal },
+   { CondZombieHaste, CondTotal },
    // Bat spawner
+   { CondBatHaste, CondTotal },
+   // Zombie haste
+   { CondTotal },
+   // Bat haste
    { CondTotal },
   };
 
@@ -57,8 +65,10 @@ const char condition_icon[][] =
 const char weights[] =
   {
    0x00, // Conditioner
-   0x10, // Zombie spawner
-   0x08, // Bat spawner
+   0x24, // Zombie spawner
+   0x20, // Bat spawner
+   0x08, // Zombie haste
+   0x08, // Bat haste
   };
 
 // starting health for each cond
@@ -67,6 +77,8 @@ const unsigned char starting_health[] =
    0xff, // Conditioner
    0x03, // Zombie spawner
    0x03, // Bat spawner
+   0x02, // Zombie haste
+   0x05, // Bat haste
   };
 
 void init_conditions() {
@@ -167,6 +179,12 @@ void conditions_update() {
           break;
         case CondBatSpawner:
           add_enemy(BatEnemy);
+          break;
+        case CondZombieHaste:
+          enemy_haste(ZombieEnemy);
+          break;
+        case CondBatHaste:
+          enemy_haste(BatEnemy);
           break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {

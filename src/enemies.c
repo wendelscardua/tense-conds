@@ -148,3 +148,11 @@ void render_enemies() {
     }
   }
 }
+
+void enemy_haste(enemy_t enemy) {
+  for(i_enemy = 0; i_enemy < MAX_ENEMIES; i_enemy++) {
+    if (enemy_hp[i_enemy] && enemy_type[i_enemy] == enemy) {
+      enemy_speed[i_enemy] += enemy_speed[i_enemy] >> 1;
+    }
+  }
+}
