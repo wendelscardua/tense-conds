@@ -152,7 +152,7 @@ no_cond:
 
   ; roll a dice
   jsr _rand8
-  cmp #$20
+  cmp #$60
   bcs no_fork
 
   and #$03

@@ -1,4 +1,3 @@
-- Increase chance of fork affecting direction
 - Music
 - SFX
 - Input seed
@@ -8,3 +7,4 @@
 
 Issues:
 - condition on top left corner is B/W
+- maybe ice collision issues?
