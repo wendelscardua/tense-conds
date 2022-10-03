@@ -126,10 +126,10 @@ void update_condition_pool() {
   if (unlocked[temp_cond]) return;
   unlocked[temp_cond] = 1;
   for(i_cond = 0; (temp_cond_2 = unlockables[temp_cond][i_cond]) != CondTotal; i_cond++) {
-    for(j_cond = 0; j < num_conditions_in_pool; j++) {
+    for(j_cond = 0; j_cond < num_conditions_in_pool; j_cond++) {
       if (condition_pool[j_cond] == temp_cond_2) break;
     }
-    if (j == num_conditions_in_pool) {
+    if (j_cond == num_conditions_in_pool) {
       condition_pool[num_conditions_in_pool] = temp_cond_2;
       num_conditions_in_pool++;
       cond_pool_weight += weights[temp_cond_2];
