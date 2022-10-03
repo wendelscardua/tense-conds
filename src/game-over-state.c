@@ -33,7 +33,7 @@ void base64digit() {
 }
 
 void scorecode_stuff() {
-  temp_int_1 = player_score;
+  temp_int_1 = player_score ^ 0xcafe;
   temp_int_2 = rng_seed;
 
   // first byte of each + checksum

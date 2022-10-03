@@ -54,6 +54,6 @@ n = decode(code[0...4])
   n>>=1
 }
 
-puts "score = #{score}"
+puts "score = #{score ^ 0xcafe}"
 puts "seed = #{seed.to_s(16)}"
 puts "ok" if (score ^ seed) == extra
