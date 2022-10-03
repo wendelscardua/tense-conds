@@ -80,6 +80,12 @@ void player_update() {
       player_direction = DirectionUp;
       temp_y--;
       if (!map_collision()) {
+        if (player_iceness > 0) {
+          do {
+            temp_y--;
+          } while(!map_collision());
+          temp_y++;
+        }
         player_row = temp_y;
         player_action = ActionMoving;
       }
@@ -87,6 +93,12 @@ void player_update() {
       player_direction = DirectionDown;
       temp_y++;
       if (!map_collision()) {
+        if (player_iceness > 0) {
+          do {
+            temp_y++;
+          } while(!map_collision());
+          temp_y--;
+        }
         player_row = temp_y;
         player_action = ActionMoving;
       }
@@ -94,6 +106,12 @@ void player_update() {
       player_direction = DirectionLeft;
       temp_x--;
       if (!map_collision()) {
+        if (player_iceness > 0) {
+          do {
+            temp_x--;
+          } while(!map_collision());
+          temp_x++;
+        }
         player_column = temp_x;
         player_action = ActionMoving;
       }
@@ -101,6 +119,12 @@ void player_update() {
       player_direction = DirectionRight;
       temp_x++;
       if (!map_collision()) {
+        if (player_iceness > 0) {
+          do {
+            temp_x++;
+          } while(!map_collision());
+          temp_x--;
+        }
         player_column = temp_x;
         player_action = ActionMoving;
       }
@@ -129,18 +153,21 @@ void player_update() {
   case ActionMoving:
     temp_x = player_column * 16;
     temp_y = player_row * 16;
-    if (player_x < temp_x) {
-      player_x++;
-    } else if (player_x > temp_x) {
-      player_x--;
-    } else if (player_y < temp_y) {
-      player_y++;
-    } else if (player_y > temp_y) {
-      player_y--;
-    } else {
-      player_action = ActionIdle;
+    if (player_iceness > 0) { i = 2; } else { i = 1; }
+    for(; i > 0; i--) {
+      if (player_x < temp_x) {
+        player_x++;
+      } else if (player_x > temp_x) {
+        player_x--;
+      } else if (player_y < temp_y) {
+        player_y++;
+      } else if (player_y > temp_y) {
+        player_y--;
+      } else {
+        player_action = ActionIdle;
+        if (player_iceness > 0) player_iceness--;
+      }
     }
-
     break;
   }
 }
@@ -196,5 +223,41 @@ void sword_lose() {
 }
 
 void freeze_player() {
-  if (player_iceness < 255) player_iceness++;
+  if (player_iceness < 256 - 3) player_iceness += 3;
+  if (player_action == ActionMoving) {
+    switch(player_direction) {
+    case DirectionUp:
+      temp_x = player_row;
+      temp_y = player_column;
+      do {
+        temp_y--;
+      } while(!map_collision());
+      player_row = temp_y + 1;
+      break;
+    case DirectionDown:
+      temp_x = player_row;
+      temp_y = player_column;
+      do {
+        temp_y++;
+      } while(!map_collision());
+      player_row = temp_y - 1;
+      break;
+    case DirectionLeft:
+      temp_y = player_column;
+      temp_x = player_row;
+      do {
+        temp_x--;
+      } while(!map_collision());
+      player_column = temp_x + 1;
+      break;
+    case DirectionRight:
+      temp_y = player_column;
+      temp_x = player_row;
+      do {
+        temp_x++;
+      } while(!map_collision());
+      player_column = temp_x - 1;
+      break;
+    }
+  }
 }
