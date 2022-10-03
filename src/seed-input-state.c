@@ -95,6 +95,7 @@ void seed_input_state_update() {
     oam_spr(0x78, 0x6f, 0x30, 0x03);
     // cancel button
     if (pad_new & (PAD_A | PAD_START)) {
+      fixed_seed = 0;
       gamestate_transition(TitleState);
     }
   }
