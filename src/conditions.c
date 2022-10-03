@@ -13,6 +13,8 @@ char num_conditions_in_pool;
 char i_cond, j_cond;
 condition_t temp_cond, temp_cond_2;
 unsigned char cond_pool_weight;
+condition_t condition_pool[CondTotal];
+char unlocked[CondTotal];
 #pragma bss-name(pop)
 
 #pragma bss-name(push, "BSS")
@@ -23,9 +25,6 @@ char condition_seconds[MAX_CONDITIONS];
 char condition_frames[MAX_CONDITIONS];
 condition_t condition_type[MAX_CONDITIONS];
 unsigned char condition_hp[MAX_CONDITIONS];
-
-condition_t condition_pool[CondTotal];
-char unlocked[CondTotal];
 
 #pragma bss-name(pop)
 
