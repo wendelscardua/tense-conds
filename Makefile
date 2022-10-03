@@ -164,6 +164,7 @@ src/enemies.s: src/enemies.c \
                src/map.h \
                src/metasprites.h \
                src/player.h \
+               src/sine-deltas.h \
                src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 

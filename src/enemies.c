@@ -8,6 +8,7 @@
 #include "subrand.h"
 #include "metasprites.h"
 #include "enemies-optimizations.h"
+#include "sine-deltas.h"
 
 #pragma bss-name(push, "ZEROPAGE")
 unsigned char i_enemy, shuffled_enemy;
@@ -64,7 +65,7 @@ void add_enemy(enemy_t enemy) {
     }
     enemy_y[i_enemy] = (0x20 + subrand8(0x90 - 0x20)) << 8;
     enemy_hp[i_enemy] = 1;
-    enemy_speed[i_enemy] = 0x0080;
+    enemy_speed[i_enemy] = 0x0028;
     enemy_aux[i_enemy] = 0x00;
     break;
   }
@@ -72,18 +73,23 @@ void add_enemy(enemy_t enemy) {
 
 void bat_enemy_update() {
   if (enemy_direction[i_enemy] == DirectionLeft) {
-    //if (enemy_x[i_enemy] < enemy_speed[i_enemy]) {
-    //  enemy_hp[i_enemy] = 0;
-    //  return;
-    //}
+    if (enemy_x[i_enemy] < enemy_speed[i_enemy]) {
+      enemy_hp[i_enemy] = 0;
+      return;
+    }
     enemy_x[i_enemy] -= enemy_speed[i_enemy];
   } else {
-    //if (enemy_x[i_enemy] >= 0xf000 - enemy_speed[i_enemy]) {
-    //  enemy_hp[i_enemy] = 0;
-    //  return;
-    //}
+    if (enemy_x[i_enemy] >= 0xf000 - enemy_speed[i_enemy]) {
+      enemy_hp[i_enemy] = 0;
+      return;
+    }
     enemy_x[i_enemy] += enemy_speed[i_enemy];
   }
+  temp = enemy_aux[i_enemy];
+  enemy_y[i_enemy] += sine_deltas[temp];
+
+  if (++temp == NUM_DELTAS) enemy_aux[i_enemy] = 0;
+  else enemy_aux[i_enemy] = temp;
 }
 
 // TODO report collisions

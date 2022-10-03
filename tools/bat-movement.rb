@@ -3,10 +3,10 @@
 
 output = ARGV.shift
 
-LOOP_FRAMES = 60
+LOOP_FRAMES = 240
 
 AMPLITUDE = 0x2000
-LENGTH = 4
+LENGTH = 1
 
 File.open(output, 'wb') do |f|
   positions = (0..LOOP_FRAMES).map do |frame_index|
