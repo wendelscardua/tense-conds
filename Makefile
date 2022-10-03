@@ -191,7 +191,8 @@ src/player.s: src/player.c \
 src/nametables.o: src/nametables.s \
                   assets/level-screen.nam.donut \
                   assets/title-screen.nam.donut \
-                  assets/game-over-screen.nam.donut
+                  assets/game-over-screen.nam.donut \
+                  assets/seed-input-screen.nam.donut
 	ca65 $< ${CA65_FLAGS}
 
 src/palettes.o: src/palettes.s src/palettes.h $(wildcard assets/*.pal)
