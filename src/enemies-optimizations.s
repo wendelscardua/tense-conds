@@ -130,7 +130,7 @@ no_collision:
   sta _enemy_hp, x
   rts
 no_cond:
-
+  lda _map, y
   cmp #Metatile::ForkedFloor
   bne no_fork
 
@@ -138,26 +138,34 @@ no_cond:
   lda _temp_enemy_x + 1
   and #$0f
   cmp #$03
-  bcs no_fork
+  bcc maybe_fork_1
   cmp #$0e
-  bcc no_fork
+  bcs maybe_fork_2
+  jmp no_fork
 
+maybe_fork_1:
   ; y near snap?
   lda _temp_enemy_y + 1
   and #$0f
   cmp #$03
-  bcs no_fork
+  bcc maybe_fork_2
   cmp #$0e
-  bcc no_fork
+  bcs maybe_fork_2
+  jmp no_fork
 
+maybe_fork_2:
   ; roll a dice
   jsr _rand8
-  cmp #$60
+  cmp #$20
   bcs no_fork
 
   and #$03
   ldx _i_enemy
   sta _enemy_direction, x
+
+  ; XXX add cooldown to fork
+  lda #$10
+  sta _map, y
 
   ; snap coordinates
   txa
@@ -175,15 +183,22 @@ no_cond:
   sta _enemy_x + 1, x
 
   lda #0
-  sta _enemy_y + 1, x
+  sta _enemy_y, x
 
   lda _temp_y
-  sta _enemy_y, x
+  sta _enemy_y + 1, x
 
   rts
 
 no_fork:
-
+  ; XXX reduce forked floor cooldown
+  lda _map, y
+  cmp #$05
+  bcc :+
+  sec
+  sbc #1
+  sta _map, y
+:
   ; try to move
   ldx _i_enemy
   lda _enemy_direction, x
