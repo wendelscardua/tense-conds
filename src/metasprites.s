@@ -230,6 +230,14 @@ metasprite_swordRight_data:
 .byte $80
 
 
+metasprite_frozenPlayer_data:
+
+
+.byte   0,  0,$41,3
+.byte   8,  0,$43,3
+.byte $80
+
+
 _metasprite_pointers:
 
 .word metasprite_playerIdleUp_data
@@ -260,3 +268,4 @@ _metasprite_pointers:
 .word metasprite_swordDown_data
 .word metasprite_swordLeft_data
 .word metasprite_swordRight_data
+.word metasprite_frozenPlayer_data

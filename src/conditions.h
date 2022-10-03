@@ -11,6 +11,7 @@ typedef enum
    CondZombieHaste,
    CondBatHaste,
    CondSword,
+   CondIce,
    CondTotal
   } condition_t;
 

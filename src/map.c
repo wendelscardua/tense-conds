@@ -8,7 +8,7 @@ char temp_index;
 #pragma bss-name(push, "BSS")
 
 char map[16 * 13];
-unsigned char cond_map[16 * 13];
+unsigned char cond_map[16 * 12];
 
 #pragma bss-name(pop)
 

@@ -47,10 +47,12 @@ const char condition_icon[][] =
    { 0xde, 0xdf },
    // Sword
    { 0xd8, 0xd9 },
+   // Ice
+   { 0xd6, 0xd7 },
   };
 
 // which conds are unlocked when adding the current cond
-  const condition_t unlockables[][] =
+const condition_t unlockables[][] =
   {
    // Conditioner
    { CondZombieSpawner, CondBatSpawner, CondTotal },
@@ -63,6 +65,8 @@ const char condition_icon[][] =
    // Bat haste
    { CondTotal },
    // Sword
+   { CondIce, CondTotal },
+   // Ice
    { CondTotal },
   };
 
@@ -75,7 +79,8 @@ const char weights[] =
    0x08, // Zombie haste
    0x08, // Bat haste
    0x09, // Sword
-  }; // Total: 0x5d
+   0x04, // Ice
+  }; // Total: 0x61
 
 // starting health for each cond
 const unsigned char starting_health[] =
@@ -86,6 +91,7 @@ const unsigned char starting_health[] =
    0x02, // Zombie haste
    0x05, // Bat haste
    0x02, // Sword
+   0x03, // Ice
   };
 
 void init_conditions() {
@@ -195,6 +201,9 @@ void conditions_update() {
           break;
         case CondSword:
           sword_get();
+          break;
+        case CondIce:
+          freeze_player();
           break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {

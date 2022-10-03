@@ -19,6 +19,7 @@ unsigned char player_score_tick;
 unsigned int player_score;
 unsigned char player_decimal_score[5];
 unsigned char sword_durability;
+unsigned char player_iceness;
 #pragma bss-name(pop)
 
 // temp_y is player row and temp_x is player column
@@ -37,6 +38,7 @@ void init_player() {
     player_decimal_score[i] = 0x10;
   }
   sword_durability = 0;
+  player_iceness = 0;
 }
 
 void player_update() {
@@ -148,17 +150,21 @@ void render_player() {
 
   temp_x = player_x;
   temp_y = player_y - 1;
-  switch(player_action) {
-  case ActionIdle:
-    oam_meta_spr(temp_x, temp_y, metasprite_pointers[PLAYER_IDLE + player_direction]);
-    break;
-  case ActionMoving:
-    temp = PLAYER_WALK + 2 * player_direction;
-    if ((temp_x ^ temp_y) & 0b100) {
-      temp++;
+  if (player_iceness > 0) {
+    oam_meta_spr(temp_x, temp_y, metasprite_pointers[FROZEN]);
+  } else {
+    switch(player_action) {
+    case ActionIdle:
+      oam_meta_spr(temp_x, temp_y, metasprite_pointers[PLAYER_IDLE + player_direction]);
+      break;
+    case ActionMoving:
+      temp = PLAYER_WALK + 2 * player_direction;
+      if ((temp_x ^ temp_y) & 0b100) {
+        temp++;
+      }
+      oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
+      break;
     }
-    oam_meta_spr(temp_x, temp_y, metasprite_pointers[temp]);
-    break;
   }
   if (sword_durability > 0) {
     oam_meta_spr(temp_x, temp_y, metasprite_pointers[SWORD + player_direction]);
@@ -187,4 +193,8 @@ void sword_lose() {
     sword_durability--;
     one_vram_buffer(SWORDLESS_TILE, NTADR_A(SWORD_X + sword_durability, SWORD_Y));
   }
+}
+
+void freeze_player() {
+  if (player_iceness < 255) player_iceness++;
 }

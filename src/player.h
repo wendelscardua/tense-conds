@@ -53,5 +53,6 @@ void render_player();
 void damage_player();
 void sword_get();
 void sword_lose();
+void freeze_player();
 
 #endif
