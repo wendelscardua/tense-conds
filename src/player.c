@@ -225,37 +225,31 @@ void sword_lose() {
 void freeze_player() {
   if (player_iceness < 256 - 3) player_iceness += 3;
   if (player_action == ActionMoving) {
+    temp_x = player_column;
+    temp_y = player_row;
     switch(player_direction) {
     case DirectionUp:
-      temp_x = player_row;
-      temp_y = player_column;
-      do {
+      while(!map_collision()) {
         temp_y--;
-      } while(!map_collision());
+      };
       player_row = temp_y + 1;
       break;
     case DirectionDown:
-      temp_x = player_row;
-      temp_y = player_column;
-      do {
+      while(!map_collision()) {
         temp_y++;
-      } while(!map_collision());
+      };
       player_row = temp_y - 1;
       break;
     case DirectionLeft:
-      temp_y = player_column;
-      temp_x = player_row;
-      do {
+      while(!map_collision()) {
         temp_x--;
-      } while(!map_collision());
+      };
       player_column = temp_x + 1;
       break;
     case DirectionRight:
-      temp_y = player_column;
-      temp_x = player_row;
-      do {
+      while(!map_collision()) {
         temp_x++;
-      } while(!map_collision());
+      };
       player_column = temp_x - 1;
       break;
     }
