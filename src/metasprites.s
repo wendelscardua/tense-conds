@@ -199,6 +199,37 @@ metasprite_flyerRight2_data:
 .byte   0,  0,$2f,2|OAM_FLIP_H
 .byte $80
 
+
+metasprite_swordUp_data:
+
+
+.byte   7,-10,$35,3
+.byte $80
+
+
+metasprite_swordDown_data:
+
+
+.byte - 1, 11,$35,3|OAM_FLIP_V
+.byte $80
+
+
+metasprite_swordLeft_data:
+
+
+.byte -12,  6,$39,3
+.byte - 4,  6,$3b,3
+.byte $80
+
+
+metasprite_swordRight_data:
+
+
+.byte  22,  6,$39,3|OAM_FLIP_H
+.byte  14,  6,$3b,3|OAM_FLIP_H
+.byte $80
+
+
 _metasprite_pointers:
 
 .word metasprite_playerIdleUp_data
@@ -225,3 +256,7 @@ _metasprite_pointers:
 .word metasprite_flyerLeft2_data
 .word metasprite_flyerRight1_data
 .word metasprite_flyerRight2_data
+.word metasprite_swordUp_data
+.word metasprite_swordDown_data
+.word metasprite_swordLeft_data
+.word metasprite_swordRight_data

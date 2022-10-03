@@ -18,6 +18,7 @@ unsigned char player_iframes;
 unsigned char player_score_tick;
 unsigned int player_score;
 unsigned char player_decimal_score[5];
+unsigned char sword_durability;
 #pragma bss-name(pop)
 
 // temp_y is player row and temp_x is player column
@@ -35,6 +36,7 @@ void init_player() {
   for(i = 0; i < 5; i++) {
     player_decimal_score[i] = 0x10;
   }
+  sword_durability = 0;
 }
 
 void player_update() {
@@ -161,7 +163,25 @@ void render_player() {
 }
 
 void damage_player() {
+  if (sword_durability > 0) {
+    sword_lose();
+    return;
+  }
   player_iframes = PLAYER_IFRAMES;
   player_lives--;
   one_vram_buffer(HEARTLESS_TILE, NTADR_A(LIVES_X + player_lives, LIVES_Y));
+}
+
+void sword_get() {
+  if (sword_durability < 10) {
+    one_vram_buffer(SWORD_TILE, NTADR_A(SWORD_X + sword_durability, SWORD_Y));
+    sword_durability++;
+  }
+}
+
+void sword_lose() {
+  if (sword_durability > 0) {
+    sword_durability--;
+    one_vram_buffer(SWORDLESS_TILE, NTADR_A(SWORD_X + sword_durability, SWORD_Y));
+  }
 }

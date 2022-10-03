@@ -4,13 +4,20 @@
 #include "directions.h"
 
 #define PLAYER_STARTING_LIVES 5
+
 #define HEART_TILE 0x71
 #define HEARTLESS_TILE 0x00
+#define SWORD_TILE 0x73
+#define SWORDLESS_TILE 0x00
+
 #define LIVES_X 23
 #define LIVES_Y 26
 
 #define SCORE_X 10
 #define SCORE_Y 26
+
+#define SWORD_X 4
+#define SWORD_Y 27
 
 #define PLAYER_IFRAMES 45
 
@@ -44,5 +51,7 @@ void init_player();
 void player_update();
 void render_player();
 void damage_player();
+void sword_get();
+void sword_lose();
 
 #endif

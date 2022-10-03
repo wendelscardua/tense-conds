@@ -4,6 +4,7 @@
 #include "attributes.h"
 #include "globals.h"
 #include "enemies.h"
+#include "player.h"
 #include "map.h"
 #include "metatiles.h"
 
@@ -44,6 +45,8 @@ const char condition_icon[][] =
    { 0xd4, 0xd5 },
    // Bat haste
    { 0xde, 0xdf },
+   // Sword
+   { 0xd8, 0xd9 },
   };
 
 // which conds are unlocked when adding the current cond
@@ -52,12 +55,14 @@ const char condition_icon[][] =
    // Conditioner
    { CondZombieSpawner, CondBatSpawner, CondTotal },
    // Zombie spawner
-   { CondZombieHaste, CondTotal },
+   { CondZombieHaste, CondSword, CondTotal },
    // Bat spawner
-   { CondBatHaste, CondTotal },
+   { CondBatHaste, CondSword, CondTotal },
    // Zombie haste
    { CondTotal },
    // Bat haste
+   { CondTotal },
+   // Sword
    { CondTotal },
   };
 
@@ -69,7 +74,8 @@ const char weights[] =
    0x20, // Bat spawner
    0x08, // Zombie haste
    0x08, // Bat haste
-  };
+   0x09, // Sword
+  }; // Total: 0x5d
 
 // starting health for each cond
 const unsigned char starting_health[] =
@@ -79,6 +85,7 @@ const unsigned char starting_health[] =
    0x03, // Bat spawner
    0x02, // Zombie haste
    0x05, // Bat haste
+   0x02, // Sword
   };
 
 void init_conditions() {
@@ -185,6 +192,9 @@ void conditions_update() {
           break;
         case CondBatHaste:
           enemy_haste(BatEnemy);
+          break;
+        case CondSword:
+          sword_get();
           break;
         }
         if (condition_hp[i] != 0xff && (--condition_hp[i]) == 0) {

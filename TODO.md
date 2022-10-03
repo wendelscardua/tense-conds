@@ -1,4 +1,3 @@
-- Sword
 - Music
 - SFX
 - Input seed

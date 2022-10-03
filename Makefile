@@ -152,6 +152,7 @@ src/conditions.s: src/conditions.c \
                   src/globals.h \
                   src/map.h \
                   src/metatiles.h \
+                  src/player.h \
                   src/subrand.h
 	cc65 -Oirs $< --add-source ${CA65_FLAGS}
 
