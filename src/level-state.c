@@ -52,9 +52,9 @@ void level_state_init() {
 
   set_unrle_buffer((char *) map);
 
-  // TODO multiple levels ? how/why?
+  rand16(); // just so the first result isn't obvious;
 
-  level_data = levels[0];
+  level_data = levels[subrand8(4)];
 
   // read entities
   temp = *level_data++;
