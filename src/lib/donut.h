@@ -5,5 +5,5 @@ extern void * donut_stream_ptr;
 extern char donut_block_buffer[64];
 #pragma zpsym("donut_stream_ptr")
 
-void donut_decompress_to_ppu(int num_blocks);
+void donut_decompress_to_ppu(char num_blocks);
 #endif

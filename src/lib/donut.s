@@ -21,6 +21,7 @@
 ; 2018-04-30: Initial release.
 ;
 ; Wendel Scardua tweaks:
+; 2023-07-16: Fix buffer offset; donut was using only the $40 bytes *past* it
 ; 2022-09-13: Don't use fixed memory locations, add support for C code
 
 .export donut_decompress_block, donut_bulk_load_ayx, donut_bulk_load_x
@@ -32,8 +33,8 @@
 .exportzp _donut_stream_ptr
 
 .segment "BSS"
-donut_block_buffer: .res 64
-_donut_block_buffer := donut_block_buffer
+_donut_block_buffer: .res 64
+donut_block_buffer := _donut_block_buffer - $40
 
 .segment "ZEROPAGE"
 donut_stream_ptr:       .res 2
