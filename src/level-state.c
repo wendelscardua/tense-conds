@@ -90,6 +90,15 @@ void level_state_init() {
   }
   flush_vram_update2();
 
+  i = 0;
+  for(temp_y = 0; temp_y < 12; temp_y++) {
+    for(temp_x = 0; temp_x < 16; temp_x++) {
+      set_attribute(metatiles[4 + 5 * map[i++]]);
+    }
+  }
+  flush_attributes();
+  flush_vram_update2();
+
   init_conditions();
   init_enemies();
 

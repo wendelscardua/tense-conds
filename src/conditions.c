@@ -223,7 +223,7 @@ void conditions_update() {
           multi_vram_buffer_horz(metatiles + 7, 2, temp_int + 0x20);
           temp_x = condition_column[i];
           temp_y = condition_row[i];
-          set_attribute(0x00);
+          set_attribute(0x03);
           cond_map[temp_y * 16 + temp_x] = 0xff;
         }
       }
